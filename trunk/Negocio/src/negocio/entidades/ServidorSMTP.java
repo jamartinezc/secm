@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package negocio;
+package negocio.entidades;
 
 /**
  *
@@ -14,6 +14,7 @@ public class ServidorSMTP {
     private String host;
     private int puerto;
     private boolean usarSSL;
+    private String SSL_FACTORY = "javax.net.ssl.SSLSocketFactory";
     private String correoDestinatario;
     private char[] contraseña;
 
@@ -56,7 +57,7 @@ public class ServidorSMTP {
     public void setContraseña(char[] contraseña) {
         this.contraseña = contraseña;
     }
-    
-    
 
+    
+    
 }
