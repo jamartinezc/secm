@@ -41,6 +41,14 @@ public class ServidorSMTP {
     public void setUsarSSL(boolean usarSSL) {
         this.usarSSL = usarSSL;
     }
+    
+    public String getSSL_FACTORY() {
+        return SSL_FACTORY;
+    }
+    
+    public void setSSL_FACTORY(String SSL_FACTORY) {
+        this.SSL_FACTORY = SSL_FACTORY;
+    }
 
     public String getCorreoDestinatario() {
         return correoDestinatario;
