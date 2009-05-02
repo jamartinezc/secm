@@ -10,5 +10,10 @@ package negocio;
  * @author Administrador
  */
 public class ServidorSMTP {
+    
+    private String host;
+    private int puerto;
+    private boolean usarSSL;
+    
 
 }
