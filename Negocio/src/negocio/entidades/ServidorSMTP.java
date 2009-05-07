@@ -15,7 +15,7 @@ public class ServidorSMTP {
     private int puerto;
     private boolean usarSSL;
     private String SSL_FACTORY = "javax.net.ssl.SSLSocketFactory";
-    private String correoDestinatario;
+    private String correoRemitente;
     private char[] contraseña;
 
     public String getHost() {
@@ -50,12 +50,12 @@ public class ServidorSMTP {
         this.SSL_FACTORY = SSL_FACTORY;
     }
 
-    public String getCorreoDestinatario() {
-        return correoDestinatario;
+    public String getCorreoRemitente() {
+        return correoRemitente;
     }
 
-    public void setCorreoDestinatario(String correoDestinatario) {
-        this.correoDestinatario = correoDestinatario;
+    public void setCorreoRemitente(String correoDestinatario) {
+        this.correoRemitente = correoDestinatario;
     }
 
     public char[] getContraseña() {
