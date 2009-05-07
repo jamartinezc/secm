@@ -13,17 +13,44 @@ import java.io.File;
  */
 public class Correo {
     
-    private String destinatario;
+    private String[] destinatariosTO;
+    private String[] destinatariosCC;
+    private String[] destinatariosBCC;
     private String asunto;
     private String mensaje;
     private File[] adjuntos;
 
-    public String getDestinatario() {
-        return destinatario;
+    public Correo(){
+        destinatariosCC = new String[0];
+        destinatariosTO = new String[0];
+        destinatariosBCC = new String[0];
+        asunto="";
+        mensaje="";
+        adjuntos=new File[0];
+    }
+    
+    public String[] getDestinatariosBCC() {
+        return destinatariosBCC;
     }
 
-    public void setDestinatario(String destinatario) {
-        this.destinatario = destinatario;
+    public void setDestinatariosBCC(String[] destinatariosBCC) {
+        this.destinatariosBCC = destinatariosBCC;
+    }
+
+    public String[] getDestinatariosCC() {
+        return destinatariosCC;
+    }
+
+    public void setDestinatariosCC(String[] destinatariosCC) {
+        this.destinatariosCC = destinatariosCC;
+    }
+
+    public String[] getDestinatariosTO() {
+        return destinatariosTO;
+    }
+
+    public void setDestinatariosTO(String[] destinatario) {
+        this.destinatariosTO = destinatario;
     }
 
     public String getAsunto() {
