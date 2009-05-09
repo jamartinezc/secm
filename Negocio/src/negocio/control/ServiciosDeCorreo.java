@@ -1,9 +1,7 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 
 package negocio.control;
+
+import negocio.entidades.ListaDeCorreos;
 
 /**
  *
@@ -11,11 +9,29 @@ package negocio.control;
  */
 public class ServiciosDeCorreo {
     
-    private ConfiguradoraServidorSMTP configuradorasServidorSMPT;
-    
-    public boolean GuardarSMTP(String host,int puerto, boolean usarSSL, String correoDestinatario, char[] contraseña){
-        configuradorasServidorSMPT.CrearServidorSMTP(host,puerto, usarSSL, correoDestinatario, contraseña);
+    public static boolean GuardarSMTP(String host,int puerto, boolean usarSSL, String correoDestinatario, char[] contraseña){
+        ConfiguradoraServidorSMTP configuradoraServidorSMTP = ConfiguradoraServidorSMTP.getInstancia();
+        configuradoraServidorSMTP.CrearServidorSMTP(host,puerto, usarSSL, correoDestinatario, contraseña);
         return true;
     }
+
+    public static ListaDeCorreos consultarListasDeCorreo(){
+        return null;
+    }
+
+
+
+    //--------------------------------------------------------------------------
+    //funcionamiento casos de uso:
+    //--------------------------------------------------------------------------
+
+    private void EnviarCorreos(){
+        
+    }
+    
+    private void crearCorreosAEnviar(){
+        
+    }
+
 
 }

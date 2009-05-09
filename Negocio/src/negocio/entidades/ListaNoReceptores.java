@@ -13,6 +13,10 @@ public class ListaNoReceptores {
     
     private String[] noReceptor;
 
+    public ListaNoReceptores() {
+        this.noReceptor = new String[0];
+    }
+
     public String[] getNoReceptor() {
         return noReceptor;
     }
