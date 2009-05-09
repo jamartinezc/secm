@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 
 package negocio.control;
 
@@ -14,7 +10,19 @@ import negocio.entidades.ServidorSMTP;
  */
 public class ConfiguradoraServidorSMTP {
     
-    private LinkedList Servidores;
+    private static ConfiguradoraServidorSMTP instancia;
+    private LinkedList servidores;
+
+    private ConfiguradoraServidorSMTP(){
+        servidores = new LinkedList();
+    }
+
+    public static ConfiguradoraServidorSMTP getInstancia() {
+        if(instancia == null){
+            instancia = new ConfiguradoraServidorSMTP();
+        }
+        return instancia;
+    }
     
     public boolean CrearServidorSMTP(String host,int puerto, boolean usarSSL, String correoDestinatario, char[] contraseña){
         ServidorSMTP nuevoServidor = new ServidorSMTP();
@@ -23,7 +31,7 @@ public class ConfiguradoraServidorSMTP {
         nuevoServidor.setHost(host);
         nuevoServidor.setPuerto(puerto);
         nuevoServidor.setUsarSSL(usarSSL);
-        Servidores.add(nuevoServidor);
+        servidores.add(nuevoServidor);
         return true;
     }
 

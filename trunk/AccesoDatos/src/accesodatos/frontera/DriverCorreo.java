@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package frontera;
+package accesodatos.frontera;
 
 import java.io.File;
 import java.util.logging.Level;
@@ -34,6 +34,17 @@ import negocio.entidades.ServidorSMTP;
  */
 public class DriverCorreo {
 
+    private static DriverCorreo instancia;
+
+    public static DriverCorreo getInstancia() {
+        if(instancia == null){
+            instancia = new DriverCorreo();
+        }
+        return instancia;
+    }
+
+    private DriverCorreo() {
+    }
 
     private static class Autenticadora extends Authenticator{
         private char[] contrasena;
@@ -74,7 +85,7 @@ public class DriverCorreo {
 
     }
 
-    public void enviarCorreo(Correo correoAenviar, ServidorSMTP servidorDeEnvio) throws AddressException, MessagingException{
+    public void enviarCorreo(Correo correoAenviar, ServidorSMTP servidorDeEnvio) throws MessagingException{
 
         String nombreServidorSMTP = servidorDeEnvio.getHost();
         String puertoSMTP = String.valueOf( servidorDeEnvio.getPuerto() );
@@ -85,7 +96,7 @@ public class DriverCorreo {
         Properties paramatrosCorreo = new Properties();
         paramatrosCorreo.put("mail.smtp.host", nombreServidorSMTP);
         paramatrosCorreo.put("mail.smtp.auth", "true");
-        paramatrosCorreo.put("mail.debug", "false");
+        paramatrosCorreo.put("mail.debug", "true");
         paramatrosCorreo.put("mail.smtp.port", puertoSMTP);
         paramatrosCorreo.put("mail.smtp.socketFactory.port", puertoSMTP);
         paramatrosCorreo.put("mail.smtp.socketFactory.class", SSLfactory);
@@ -157,12 +168,13 @@ public class DriverCorreo {
         
         //enviar el mensaje
         Transport.send(mensaje);
+        System.out.println("Enviando correo...");
     }
 
     public static void main(String[] args) {
         ServidorSMTP serv=new  ServidorSMTP();
         Correo correo  = new Correo();
-        DriverCorreo dc = new DriverCorreo();
+        DriverCorreo dc = getInstancia();
 
         serv.setContraseña("AngelaJorgeElias".toCharArray());
         serv.setCorreoRemitente("secm.prueba@gmail.com");
@@ -171,9 +183,9 @@ public class DriverCorreo {
         serv.setUsarSSL(true);
 
         String[] TO = new String[1];
-        TO[0]="jaguar.scratch@gmail.com";
+        TO[0]="5g6e5rthg6f5r4@gmail.com";
         String[] CC = new String[1];
-        CC[0]="violetamf3@hotmail.com";
+        CC[0]="kmf7lfr67une45@gmail.com";
         correo.setDestinatariosTO(TO);
         correo.setDestinatariosCC(CC);
         correo.setAsunto("secm: prueba envío de correo");
@@ -185,7 +197,7 @@ public class DriverCorreo {
         adjuntos[1]=new File("prueba2.properties");
         adjuntos[2]=new File("jack-the-black-cat-9439.jpg");
         correo.setAdjuntos(adjuntos);
-        
+
         try {
             dc.enviarCorreo(correo, serv);
         } catch (AddressException ex) {
