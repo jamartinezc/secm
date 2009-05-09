@@ -50,7 +50,18 @@ public class EnviadoraDeCorreos {
         while (correoIt.hasNext()) {
             Correo correo = correoIt.next();
             try {
-                driver.enviarCorreo(correo, lista.getServidorSMTP());
+//                driver.enviarCorreo(correo, lista.getServidorSMTP());
+                driver.enviarCorreo(lista.getServidorSMTP().getHost(),
+                        lista.getServidorSMTP().getPuerto(),
+                        lista.getServidorSMTP().getSSL_FACTORY(),
+                        lista.getServidorSMTP().getCorreoRemitente(),
+                        lista.getServidorSMTP().getContrasena(),
+                        correo.getDestinatariosTO(),
+                        correo.getDestinatariosCC(),
+                        correo.getDestinatariosBCC(),
+                        correo.getAsunto(),
+                        correo.getMensaje(),
+                        correo.getAdjuntos());
             } catch (MessagingException ex) {
                 //TODO registrar errores en el log
                 ex.printStackTrace();
@@ -68,7 +79,7 @@ public class EnviadoraDeCorreos {
         Correo correo  = new Correo();
         LinkedList<Correo> correos = new LinkedList<Correo>();
 
-        serv.setContraseña("AngelaJorgeElias".toCharArray());
+        serv.setContrasena("AngelaJorgeElias".toCharArray());
         serv.setCorreoRemitente("secm.prueba@gmail.com");
         serv.setHost("smtp.gmail.com");
         serv.setPuerto(465);
