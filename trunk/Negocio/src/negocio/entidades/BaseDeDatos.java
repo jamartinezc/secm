@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 
 package negocio.entidades;
 
@@ -11,27 +7,29 @@ package negocio.entidades;
  */
 public class BaseDeDatos implements OrigenDeDatos{
     
-    private String [][] columnasAConsultar;
+    private String SqlAConsultar;
     private String usuario;
     private char[] contraseña;
     private String driver;
     private String direccion;
             
 
+    @Override
     public Correo leerOrigenDeDatos() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    @Override
     public boolean isModificable() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public String[][] getColumnasAConsultar() {
-        return columnasAConsultar;
+    public String getSqlAConsultar() {
+        return SqlAConsultar;
     }
 
-    public void setColumnasAConsultar(String[][] columnasAConsultar) {
-        this.columnasAConsultar = columnasAConsultar;
+    public void setSqlAConsultar(String SqlAConsultar) {
+        this.SqlAConsultar = SqlAConsultar;
     }
 
     public String getUsuario() {

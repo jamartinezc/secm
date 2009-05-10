@@ -24,13 +24,14 @@ public class ConfiguradoraServidorSMTP {
         return instancia;
     }
     
-    public boolean CrearServidorSMTP(String host,int puerto, boolean usarSSL, String correoDestinatario, char[] contraseña){
+    public boolean CrearServidorSMTP(String host,int puerto, boolean usarSSL, String correoRemitente, char[] contraseña){
         ServidorSMTP nuevoServidor = new ServidorSMTP();
         nuevoServidor.setContrasena(contraseña);
-        nuevoServidor.setCorreoRemitente(correoDestinatario);
+        nuevoServidor.setCorreoRemitente(correoRemitente);
         nuevoServidor.setHost(host);
         nuevoServidor.setPuerto(puerto);
         nuevoServidor.setUsarSSL(usarSSL);
+        nuevoServidor.guardar();
         servidores.add(nuevoServidor);
         return true;
     }

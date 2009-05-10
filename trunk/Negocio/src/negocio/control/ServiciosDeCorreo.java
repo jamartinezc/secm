@@ -1,7 +1,11 @@
 
 package negocio.control;
 
+import accesodatos.frontera.DriverBD;
+import accesodatos.frontera.consultoradeorigen.ConsultoraDeBD;
+import accesodatos.frontera.consultoradeorigen.ConsultoraDeOrigen;
 import negocio.entidades.ListaDeCorreos;
+import negocio.entidades.OrigenDeDatos;
 
 /**
  *
@@ -19,7 +23,23 @@ public class ServiciosDeCorreo {
         return null;
     }
 
+    public static ConsultoraDeBD consultarBD(String usuario, char[] contraseña, String driver, String protocolo , String direccion, String baseDeDatos){
+        
+        ConsultoraDeBD cd = new ConsultoraDeBD(driver,protocolo, usuario, String.valueOf(contraseña), baseDeDatos);
 
+        cd.abrir(direccion);
+
+        return cd;
+    }
+
+    public String[] columnasDisponibles(ConsultoraDeOrigen consultora){
+
+        return consultora.consultarColumnasDisponibles();
+    }
+
+    public String[][] consultarDatos(ConsultoraDeOrigen origen, String[] columnas){
+        return origen.consultarDatos(columnas);
+    }
 
     //--------------------------------------------------------------------------
     //funcionamiento casos de uso:
