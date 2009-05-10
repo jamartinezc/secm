@@ -1,7 +1,6 @@
 
 package negocio.control;
 
-import accesodatos.frontera.DriverCorreo;
 
 /**
  *
@@ -9,7 +8,5 @@ import accesodatos.frontera.DriverCorreo;
  */
 public class AdministradoraListasDeCorreos {
 
-    public static void main(String[] args) {
-        
-    }
+
 }
