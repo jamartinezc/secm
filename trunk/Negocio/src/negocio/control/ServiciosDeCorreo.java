@@ -4,6 +4,7 @@ package negocio.control;
 import accesodatos.frontera.DriverBD;
 import accesodatos.frontera.consultoradeorigen.ConsultoraDeBD;
 import accesodatos.frontera.consultoradeorigen.ConsultoraDeOrigen;
+import java.util.Properties;
 import negocio.entidades.ListaDeCorreos;
 import negocio.entidades.OrigenDeDatos;
 
@@ -37,9 +38,33 @@ public class ServiciosDeCorreo {
         return consultora.consultarColumnasDisponibles();
     }
 
-    public String[][] consultarDatos(ConsultoraDeOrigen origen, String[] columnas){
-        return origen.consultarDatos(columnas);
+//    public String[][] consultarDatos(ListaDeCorreos lista, String[] columnas){
+//        return lista.getOrigenDeDatos().getComportamientoOrigen().consultarDatos(columnas);
+//    }
+
+    /**
+     * Crea una ListaDeCorreos nueva, abre el origen.
+     * @param origen Determina que tipo de origen de datos se tomará, debe ser tomado de ConsultoraDeOrigenFactory
+     * @param datos Properties del origen de datos, estos dependen de que origen se quiere.
+     * @return la listaDeCorreo creada.
+     */public ListaDeCorreos crearListaDeCorreos(int origen, Properties datos){
+        ListaDeCorreos lista = AdministradoraListasDeCorreos.getInstancia().crearListaDeCorreos(origen, datos);
+        OrigenDeDatos origenDatos = lista.getOrigenDeDatos();
+
+        origenDatos.abrir();
+//        String[] columnas = origenDatos.getComportamientoOrigen().consultarColumnasDisponibles();
+        
+        return lista;
     }
+
+     /**
+      * Guarda una lista con los campos definidos en columnas
+      * @param lista la lista de correos a guardar
+      * @param columnas una pareja de tipo {etiqueta, columna en origen de datos}.
+      */
+     public void guardarLista(ListaDeCorreos lista, Properties columnas){
+         
+     }
 
     //--------------------------------------------------------------------------
     //funcionamiento casos de uso:
