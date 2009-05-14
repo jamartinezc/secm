@@ -1,12 +1,8 @@
-/*
-
- */
 
 package accesodatos.frontera.consultoradeorigen;
 
 import accesodatos.frontera.DriverBD;
 import java.sql.Connection;
-import java.sql.Driver;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.logging.Level;
@@ -22,7 +18,7 @@ public class ConsultoraDeBD implements ConsultoraDeOrigen{
     private String protocoloDBMS;
     private Connection conexion;
     private String usuario;
-    private String contrasenia;
+    private char[] contrasena;
     private String baseDeDatos;
 
     /**
@@ -37,15 +33,28 @@ public class ConsultoraDeBD implements ConsultoraDeOrigen{
         this.driver=driver;
         protocoloDBMS=protocolo;
         usuario=usuarioBD;
-        contrasenia=contrasenaBD;
+        contrasena=contrasenaBD.toCharArray();
         this.baseDeDatos=baseDeDatos;
     }
 
     
     @Override
     public boolean abrir(String ruta) {
+
+        if( conexion !=  null ){
+            try {
+                if (!conexion.isClosed()) {
+                    return true;
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+                Logger.getLogger(ConsultoraDeBD.class.getName()).log(Level.SEVERE, null, ex);
+                return false;
+            }
+        }
+
         try {
-            conexion = DriverBD.conectar(ruta, usuario, contrasenia, driver, protocoloDBMS);
+            conexion = DriverBD.conectar(ruta, usuario, String.valueOf(contrasena), driver, protocoloDBMS);
             DriverBD.seleccionarBD(conexion, baseDeDatos);
         } catch (ClassNotFoundException ex) {
             return false;
@@ -145,11 +154,11 @@ public class ConsultoraDeBD implements ConsultoraDeOrigen{
     }
 
     public String getContrasenia() {
-        return contrasenia;
+        return String.valueOf(contrasena);
     }
 
     public void setContrasenia(String contrasenia) {
-        this.contrasenia = contrasenia;
+        this.contrasena = contrasenia.toCharArray();
     }
 
     public String getUsuario() {
@@ -174,7 +183,7 @@ public class ConsultoraDeBD implements ConsultoraDeOrigen{
         //"localhost", "root","restinpeace33", "com.mysql.jdbc.Driver", "mysql://"
         ConsultoraDeBD c = new ConsultoraDeBD("com.mysql.jdbc.Driver", "mysql://", "root", "restinpeace33","sakila");
 //        String[] col = {"select staff.first_name,store.last_update from staff,store where staff_id=manager_staff_id"};
-        String[] col = {"staff.first_name","store.last_update","staff_id=manager_staff_id"};
+        String[] col = {"staff.first_name AS uno","store.last_update AS dos","staff_id=manager_staff_id"};
         c.abrir("localhost");
         String[][] s = c.consultarDatos(col);
 

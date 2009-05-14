@@ -17,5 +17,6 @@ public interface ConsultoraDeOrigen {
      * @return
      */
     public String[][] consultarDatos(String[] columnas);
+    
         
 }
