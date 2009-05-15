@@ -163,7 +163,6 @@ public class DriverCorreo {
         newMultiPart.addBodyPart(part);
 
         //adjuntar archivos
-        //TODO adjuntar multiples archivos
         for(int i=0;i<adjuntos.length;i++){
             BodyPart archivosBodyPart = new MimeBodyPart();
             File adjunto = adjuntos[i];

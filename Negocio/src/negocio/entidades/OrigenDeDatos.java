@@ -2,21 +2,28 @@
 package negocio.entidades;
 
 import accesodatos.frontera.consultoradeorigen.ConsultoraDeOrigen;
+import java.io.File;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.Properties;
 
 /**
  *
  * @author Administrador
  */
-public class OrigenDeDatos {
+public class OrigenDeDatos implements Serializable{
 
-    public Properties columnas;
+    private Properties columnas;
+    private String mensaje;
+    private String asunto;
+    private File[] ajuntos;
+    
 
-    public String origen;
+    private String origen;
 
-    public ConsultoraDeOrigen comportamientoOrigen;
+    private ConsultoraDeOrigen comportamientoOrigen;
 
     public Properties getColumnas() {
         return columnas;
@@ -42,6 +49,30 @@ public class OrigenDeDatos {
         this.origen = origen;
     }
 
+    public File[] getAjuntos() {
+        return ajuntos;
+    }
+
+    public void setAjuntos(File[] ajuntos) {
+        this.ajuntos = ajuntos;
+    }
+
+    public String getAsunto() {
+        return asunto;
+    }
+
+    public void setAsunto(String asunto) {
+        this.asunto = asunto;
+    }
+
+    public String getMensaje() {
+        return mensaje;
+    }
+
+    public void setMensaje(String mensaje) {
+        this.mensaje = mensaje;
+    }
+
     public boolean abrir(){
         return comportamientoOrigen.abrir(origen);
     }
@@ -64,18 +95,34 @@ public class OrigenDeDatos {
 
             String[][] datos = comportamientoOrigen.consultarDatos(columnasAConsultar);
 
-
-            //inicializar correo por correo
-            Correo correo = new Correo();
-            correo.setDestinatariosCC(null);
-            correo.setDestinatariosTO(null);
-            correo.setDestinatariosBCC(null);
-            correo.setAsunto(null);
-            correo.setMensaje(null);
-            correo.setAdjuntos(null);
-
-
             
+            //inicializar correo por correo con los datos principales
+            Iterator<String> etiquetasListIt = etiquetasList.iterator();
+            for(int i=0; i<datos.length;i++){//pora cada correo
+                int j=0,datosPrincipales=0;
+                Correo correo = new Correo();
+                while (etiquetasListIt.hasNext() && datosPrincipales<6) {//por cada columna
+                    String etiqueta = etiquetasListIt.next();
+                    String columna=datos[i][j];
+                    if(etiqueta.equals("#destinatariosCC#")){
+                        correo.setDestinatariosCC(columna.split(","));
+                    }else if(etiqueta.equals("#destinatariosTO#")){
+                        correo.setDestinatariosTO(columna.split(","));
+                    }else if(etiqueta.equals("#destinatariosBCC#")){
+                        correo.setDestinatariosBCC(columna.split(","));
+                    }else if(etiqueta.equals("#asunto#")){
+                        correo.setAsunto(columna);
+                    }else if(etiqueta.equals("#adjuntos#")){
+                        correo.setAdjuntos(null);//TODO ?
+                    }else if(etiqueta.equals("#mensaje#")){
+                        mensaje=columna;
+                    }
+                    j++;
+                }
+            correo.setMensaje(null);
+            }
+
+
         }
 
         
@@ -85,6 +132,9 @@ public class OrigenDeDatos {
     public boolean isModificable(){
         return false;
     }
-    
+
+    public String toString(){
+        return "{"+origen+","+columnas+"}";
+    }
 
 }

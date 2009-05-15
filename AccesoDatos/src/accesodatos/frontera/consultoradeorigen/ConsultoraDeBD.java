@@ -12,11 +12,11 @@ import java.util.logging.Logger;
  *  Clase para consultar una base de datos.
  * @author Jorge A. Martínez
  */
-public class ConsultoraDeBD implements ConsultoraDeOrigen{
+public class ConsultoraDeBD implements ConsultoraDeOrigen {
 
     private String driver;
     private String protocoloDBMS;
-    private Connection conexion;
+    transient private Connection conexion;//transient para que no se guarde al ser persistida
     private String usuario;
     private char[] contrasena;
     private String baseDeDatos;
@@ -180,8 +180,8 @@ public class ConsultoraDeBD implements ConsultoraDeOrigen{
     
 
     public static void main(String[] args) {
-        //"localhost", "root","restinpeace33", "com.mysql.jdbc.Driver", "mysql://"
-        ConsultoraDeBD c = new ConsultoraDeBD("com.mysql.jdbc.Driver", "mysql://", "root", "restinpeace33","sakila");
+        //"localhost", "test","tset", "com.mysql.jdbc.Driver", "mysql://"
+        ConsultoraDeBD c = new ConsultoraDeBD("com.mysql.jdbc.Driver", "mysql://", "test", "tset","sakila");
 //        String[] col = {"select staff.first_name,store.last_update from staff,store where staff_id=manager_staff_id"};
         String[] col = {"staff.first_name AS uno","store.last_update AS dos","staff_id=manager_staff_id"};
         c.abrir("localhost");

@@ -4,6 +4,8 @@ package negocio.control;
 import accesodatos.frontera.DriverBD;
 import accesodatos.frontera.consultoradeorigen.ConsultoraDeBD;
 import accesodatos.frontera.consultoradeorigen.ConsultoraDeOrigen;
+import accesodatos.frontera.consultoradeorigen.factory.ConsultoraDeOrigenFactory;
+import com.sun.org.apache.bcel.internal.generic.GETFIELD;
 import java.util.Properties;
 import negocio.entidades.ListaDeCorreos;
 import negocio.entidades.OrigenDeDatos;
@@ -33,7 +35,7 @@ public class ServiciosDeCorreo {
         return cd;
     }
 
-    public String[] columnasDisponibles(ConsultoraDeOrigen consultora){
+    public static String[] columnasDisponibles(ConsultoraDeOrigen consultora){
 
         return consultora.consultarColumnasDisponibles();
     }
@@ -47,8 +49,8 @@ public class ServiciosDeCorreo {
      * @param origen Determina que tipo de origen de datos se tomará, debe ser tomado de ConsultoraDeOrigenFactory
      * @param datos Properties del origen de datos, estos dependen de que origen se quiere.
      * @return la listaDeCorreo creada.
-     */public ListaDeCorreos crearListaDeCorreos(int origen, Properties datos){
-        ListaDeCorreos lista = AdministradoraListasDeCorreos.getInstancia().crearListaDeCorreos(origen, datos);
+     */public static ListaDeCorreos crearListaDeCorreos(String nombre, int origen, Properties datos){
+        ListaDeCorreos lista = AdministradoraListasDeCorreos.getInstancia().crearListaDeCorreos(nombre, origen, datos);
         OrigenDeDatos origenDatos = lista.getOrigenDeDatos();
 
         origenDatos.abrir();
@@ -60,23 +62,55 @@ public class ServiciosDeCorreo {
      /**
       * Guarda una lista con los campos definidos en columnas
       * @param lista la lista de correos a guardar
-      * @param columnas una pareja de tipo {etiqueta, columna en origen de datos}.
+      * @param columnas una pareja de tipo {#etiqueta#, columna en origen de datos}.
+      * Si la consulta es a una BD el ultimo parámetro debe ser del tipo ("","WHERE"+condicion SQL)
       */
-     public void guardarLista(ListaDeCorreos lista, Properties columnas){
-         
+     public static void guardarLista(ListaDeCorreos lista, Properties columnas){
+         lista.getOrigenDeDatos().setColumnas(columnas);
+         AdministradoraListasDeCorreos.getInstancia().guardar(lista);
      }
 
     //--------------------------------------------------------------------------
     //funcionamiento casos de uso:
     //--------------------------------------------------------------------------
 
-    private void EnviarCorreos(){
+    private static void EnviarCorreos(){
         
     }
     
-    private void crearCorreosAEnviar(){
+    private static void crearCorreosAEnviar(){
         
     }
 
+    private static void ingresarListaDeCorreosBD(){
+
+        Properties datos = new Properties();
+        //String driver, String protocolo, String usuarioBD, String contrasenaBD, String baseDeDatos
+        datos.setProperty("rutaOrigen", "localhost");
+        datos.setProperty("driver", "com.mysql.jdbc.Driver");
+        datos.setProperty("protocolo", "mysql://");
+        datos.setProperty("usuarioBD", "test");
+        datos.setProperty("contrasenaBD", "tset");
+        datos.setProperty("baseDeDatos", "test");
+
+        ListaDeCorreos lista = crearListaDeCorreos("listaDos", ConsultoraDeOrigenFactory.BD, datos);
+
+        System.out.println(lista.getNombre());
+        System.out.println(lista.getOrigenDeDatos().getOrigen());
+        System.out.println(lista.getOrigenDeDatos().getColumnas());
+
+        Properties columnas = new Properties();
+        columnas.setProperty("#nombre#", "prueba.nombre");
+        columnas.setProperty("WHERE", "where id<=2");
+        guardarLista(lista, columnas);
+        
+    }
+
+    public static void main(String[] args) {
+//        ingresarListaDeCorreosBD();
+        AdministradoraListasDeCorreos.getInstancia().abrir();
+        System.out.println(AdministradoraListasDeCorreos.getInstancia().listas.toString());
+        AdministradoraListasDeCorreos.getInstancia().listas.getFirst().getOrigenDeDatos().leerOrigenDeDatos();
+    }
 
 }
