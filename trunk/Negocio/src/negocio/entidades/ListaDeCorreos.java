@@ -2,18 +2,28 @@
 
 package negocio.entidades;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 
 /**
  *
  * @author Administrador
  */
-public class ListaDeCorreos {
-    
+public class ListaDeCorreos implements Serializable{
+
+    private String nombre;
     private OrigenDeDatos origenDeDatos;
     private LinkedList<Correo> correos;
     private ListaNoReceptores noReceptores;
     private ServidorSMTP servidorSMTP;
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
 
     public ListaDeCorreos(){
         noReceptores = new ListaNoReceptores();
@@ -49,6 +59,10 @@ public class ListaDeCorreos {
 
     public void setServidorSMTP(ServidorSMTP servidorSMTP) {
         this.servidorSMTP = servidorSMTP;
+    }
+
+    public String toString(){
+        return "{"+nombre+origenDeDatos+"}";
     }
     
 

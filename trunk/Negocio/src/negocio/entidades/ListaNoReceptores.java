@@ -5,11 +5,13 @@
 
 package negocio.entidades;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Administrador
  */
-public class ListaNoReceptores {
+public class ListaNoReceptores implements Serializable{
     
     private String[] noReceptor;
 

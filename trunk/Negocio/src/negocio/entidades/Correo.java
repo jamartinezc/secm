@@ -6,12 +6,13 @@
 package negocio.entidades;
 
 import java.io.File;
+import java.io.Serializable;
 
 /**
  *
  * @author Administrador
  */
-public class Correo {
+public class Correo implements Serializable{
     
     private String[] destinatariosTO;
     private String[] destinatariosCC;
