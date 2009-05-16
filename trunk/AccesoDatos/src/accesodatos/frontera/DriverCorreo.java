@@ -174,7 +174,7 @@ public class DriverCorreo {
 
         //añadir las part al mensaje
         mensaje.setContent(multiPart);
-        
+        System.out.println("Pasa por: "+nombreServidorSMTP);
         //enviar el mensaje
         Transport.send(mensaje);
         System.out.println("Enviando correo...");

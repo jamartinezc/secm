@@ -57,8 +57,10 @@ public class ConsultoraDeBD implements ConsultoraDeOrigen {
             conexion = DriverBD.conectar(ruta, usuario, String.valueOf(contrasena), driver, protocoloDBMS);
             DriverBD.seleccionarBD(conexion, baseDeDatos);
         } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
             return false;
         } catch (SQLException ex) {
+            ex.printStackTrace();
             return false;
         }
         return true;

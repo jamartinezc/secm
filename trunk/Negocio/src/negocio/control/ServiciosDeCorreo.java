@@ -5,7 +5,7 @@ import accesodatos.frontera.DriverBD;
 import accesodatos.frontera.consultoradeorigen.ConsultoraDeBD;
 import accesodatos.frontera.consultoradeorigen.ConsultoraDeOrigen;
 import accesodatos.frontera.consultoradeorigen.factory.ConsultoraDeOrigenFactory;
-import com.sun.org.apache.bcel.internal.generic.GETFIELD;
+import java.io.File;
 import java.util.Properties;
 import negocio.entidades.ListaDeCorreos;
 import negocio.entidades.OrigenDeDatos;
@@ -36,7 +36,6 @@ public class ServiciosDeCorreo {
     }
 
     public static String[] columnasDisponibles(ConsultoraDeOrigen consultora){
-
         return consultora.consultarColumnasDisponibles();
     }
 
@@ -65,17 +64,21 @@ public class ServiciosDeCorreo {
       * @param columnas una pareja de tipo {#etiqueta#, columna en origen de datos}.
       * Si la consulta es a una BD el ultimo parámetro debe ser del tipo ("","WHERE"+condicion SQL)
       */
-     public static void guardarLista(ListaDeCorreos lista, Properties columnas){
-         lista.getOrigenDeDatos().setColumnas(columnas);
+     public static void guardarLista(ListaDeCorreos lista, Properties columnas, String asunto, String mensaje, String[] adjuntos){
+         
+         File[] archivosAdjuntos = new File[adjuntos.length];
+         for(int i=0; i<adjuntos.length;i++){
+             archivosAdjuntos[i]=new File(adjuntos[i]);
+         }
+         AdministradoraListasDeCorreos.getInstancia().setColumnas(lista, columnas, asunto, mensaje, archivosAdjuntos);
          AdministradoraListasDeCorreos.getInstancia().guardar(lista);
      }
-
+     
     //--------------------------------------------------------------------------
     //funcionamiento casos de uso:
     //--------------------------------------------------------------------------
 
     private static void EnviarCorreos(){
-        
     }
     
     private static void crearCorreosAEnviar(){
@@ -83,7 +86,6 @@ public class ServiciosDeCorreo {
     }
 
     private static void ingresarListaDeCorreosBD(){
-
         Properties datos = new Properties();
         //String driver, String protocolo, String usuarioBD, String contrasenaBD, String baseDeDatos
         datos.setProperty("rutaOrigen", "localhost");
@@ -101,9 +103,11 @@ public class ServiciosDeCorreo {
 
         Properties columnas = new Properties();
         columnas.setProperty("#nombre#", "prueba.nombre");
-        columnas.setProperty("WHERE", "where id<=2");
-        guardarLista(lista, columnas);
-        
+        columnas.setProperty("#WHERE#", "id<=2");
+        String[] archivos = new String[1];
+        archivos[0]=("jack-the-black-cat-9439.jpg");
+        guardarLista(lista, columnas,"asunto", "nombre:#nombre#", archivos);
+        //TODO asignar servidor SMTP
     }
 
     public static void main(String[] args) {
@@ -111,6 +115,7 @@ public class ServiciosDeCorreo {
         AdministradoraListasDeCorreos.getInstancia().abrir();
         System.out.println(AdministradoraListasDeCorreos.getInstancia().listas.toString());
         AdministradoraListasDeCorreos.getInstancia().listas.getFirst().getOrigenDeDatos().leerOrigenDeDatos();
+        EnviadoraDeCorreos.getInstancia().enviarLista(AdministradoraListasDeCorreos.getInstancia().listas.getFirst());
     }
 
 }

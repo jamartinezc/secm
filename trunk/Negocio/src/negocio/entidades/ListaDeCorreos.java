@@ -36,8 +36,16 @@ public class ListaDeCorreos implements Serializable{
     public void setCorreos(LinkedList<Correo> correos) {
         this.correos = correos;
     }
+    
+    public void cargarCorreos(){
+        correos = new LinkedList<Correo>();
+        Correo[] aCargar = origenDeDatos.leerOrigenDeDatos();
+        for (int i = 0; i < aCargar.length; i++) {
+            correos.add(aCargar[i]);
+        }
+    }
 
-    public ListaNoReceptores getNoReceptores() {
+    public ListaNoReceptores getNoReceptores(){
         return noReceptores;
     }
 
