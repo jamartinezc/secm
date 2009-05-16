@@ -49,8 +49,11 @@ public class AdministradoraListasDeCorreos {
         return lista;
     }
 
-    public boolean setColumnas(ListaDeCorreos lista, Properties columnas){
+    public boolean setColumnas(ListaDeCorreos lista, Properties columnas, String asunto, String mensaje, File[] adjuntos){
         lista.getOrigenDeDatos().setColumnas(columnas);
+        lista.getOrigenDeDatos().setAsunto(asunto);
+        lista.getOrigenDeDatos().setMensaje(mensaje);
+        lista.getOrigenDeDatos().setAdjuntos(adjuntos);
         //return guardar(lista);
         return true;
     }

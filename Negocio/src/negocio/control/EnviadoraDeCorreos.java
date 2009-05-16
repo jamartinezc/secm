@@ -42,6 +42,7 @@ public class EnviadoraDeCorreos {
      */
     public boolean enviarLista(ListaDeCorreos lista){
         boolean errores = false;
+        lista.cargarCorreos();
         LinkedList<Correo> correos = lista.getCorreos();
         Iterator<Correo> correoIt = correos.iterator();
 

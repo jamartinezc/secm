@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Properties;
 
 /**
@@ -18,7 +19,7 @@ public class OrigenDeDatos implements Serializable{
     private Properties columnas;
     private String mensaje;
     private String asunto;
-    private File[] ajuntos;
+    private File[] adjuntos;
     
 
     private String origen;
@@ -49,12 +50,12 @@ public class OrigenDeDatos implements Serializable{
         this.origen = origen;
     }
 
-    public File[] getAjuntos() {
-        return ajuntos;
+    public File[] getAdjuntos() {
+        return adjuntos;
     }
 
-    public void setAjuntos(File[] ajuntos) {
-        this.ajuntos = ajuntos;
+    public void setAdjuntos(File[] adjuntos) {
+        this.adjuntos = adjuntos;
     }
 
     public String getAsunto() {
@@ -78,7 +79,8 @@ public class OrigenDeDatos implements Serializable{
     }
     
     public Correo[] leerOrigenDeDatos(){
-
+        String where=null;
+        LinkedList<Correo> correos = new LinkedList<Correo>();
         boolean conexionAbierta = abrir();
         if( conexionAbierta ){
             Enumeration etiquetas = columnas.propertyNames();
@@ -87,46 +89,62 @@ public class OrigenDeDatos implements Serializable{
 
             while(etiquetas.hasMoreElements()){
                 String etiqueta = (String) etiquetas.nextElement();
-                etiquetasList.add(etiqueta);
-                columnasDeOrigen.add( columnas.getProperty(etiqueta));
+                if( ! etiqueta.equalsIgnoreCase("#WHERE#") ){
+                    etiquetasList.add(etiqueta);
+                    columnasDeOrigen.add( columnas.getProperty(etiqueta));
+                }else{
+                    where= columnas.getProperty(etiqueta);
+                }
             }
 
-            String[] columnasAConsultar = (String[]) columnasDeOrigen.toArray();
+           String[] columnasAConsultar;
+            if(where != null){//si hay un where insertarlo al final
+                columnasAConsultar = new String[ columnasDeOrigen.size()+1 ];
+                int id=0;
+                for (Iterator<String> it = columnasDeOrigen.iterator(); it.hasNext();) {
+                    String columna = it.next();
+                    columnasAConsultar[id]=columna;
+                    id++;
+                }
+                columnasAConsultar[id]=where;
+            }else{
+                 columnasAConsultar = columnasDeOrigen.toArray(new String[0]);
+            }
 
             String[][] datos = comportamientoOrigen.consultarDatos(columnasAConsultar);
 
-            
             //inicializar correo por correo con los datos principales
             Iterator<String> etiquetasListIt = etiquetasList.iterator();
-            for(int i=0; i<datos.length;i++){//pora cada correo
-                int j=0,datosPrincipales=0;
+            for(int i=0; i<datos.length;i++){//para cada correo
+                int j=0;
                 Correo correo = new Correo();
-                while (etiquetasListIt.hasNext() && datosPrincipales<6) {//por cada columna
+                String mensajeActual=new String(mensaje);//TODO verificar
+                correo.setAdjuntos(adjuntos);
+                correo.setAsunto(asunto);
+                    
+                while (etiquetasListIt.hasNext()) {//por cada columna
                     String etiqueta = etiquetasListIt.next();
                     String columna=datos[i][j];
+                    
                     if(etiqueta.equals("#destinatariosCC#")){
                         correo.setDestinatariosCC(columna.split(","));
                     }else if(etiqueta.equals("#destinatariosTO#")){
                         correo.setDestinatariosTO(columna.split(","));
                     }else if(etiqueta.equals("#destinatariosBCC#")){
                         correo.setDestinatariosBCC(columna.split(","));
-                    }else if(etiqueta.equals("#asunto#")){
-                        correo.setAsunto(columna);
-                    }else if(etiqueta.equals("#adjuntos#")){
-                        correo.setAdjuntos(null);//TODO ?
-                    }else if(etiqueta.equals("#mensaje#")){
-                        mensaje=columna;
+                    }else{
+                        mensajeActual.replaceAll(etiqueta, columna);
                     }
                     j++;
                 }
-            correo.setMensaje(null);
+            correo.setMensaje(mensajeActual);
+            correos.add(correo);
             }
-
 
         }
 
         
-        return null;
+        return correos.toArray(new Correo[0]);
     }
 
     public boolean isModificable(){
