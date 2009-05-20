@@ -9,10 +9,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Properties;
 import negocio.entidades.ListaDeCorreos;
 import negocio.entidades.OrigenDeDatos;
+import negocio.entidades.ServidorSMTP;
 
 
 /**
@@ -21,7 +23,7 @@ import negocio.entidades.OrigenDeDatos;
  */
 public class AdministradoraListasDeCorreos {
 
-    public LinkedList<ListaDeCorreos> listas;
+    private LinkedList<ListaDeCorreos> listas;
 
     private static AdministradoraListasDeCorreos instancia;
 
@@ -68,10 +70,10 @@ public class AdministradoraListasDeCorreos {
          File archivo = new File( "Listas.ecm" );
          if( archivo.length() > 0){
              in = new ObjectInputStream(new FileInputStream(nombreDeArchivo));
-             listas = (LinkedList<ListaDeCorreos>)in.readObject();
+                setListas((LinkedList<ListaDeCorreos>) in.readObject());
              in.close();
          }else{
-            listas = new LinkedList<ListaDeCorreos>();
+                setListas(new LinkedList<ListaDeCorreos>());
          }
        }
        catch(IOException ex)
@@ -87,13 +89,30 @@ public class AdministradoraListasDeCorreos {
        return true;
     }
 
+    /**
+     * Busca una lista con el nombre indicado y la retorna, si esta no se encuentra retorna null.
+     * @param nombreLista Nombre de la lista a buscar
+     * @return La lista encontrada o <b>null</b> si no se encuentra.
+     */
+    public ListaDeCorreos buscar(String nombreLista){
+
+        for (Iterator<ListaDeCorreos> it = listas.iterator(); it.hasNext();) {
+            ListaDeCorreos listaDeCorreos = it.next();
+            if(listaDeCorreos.getNombre().equals(nombreLista)){
+                return listaDeCorreos;
+            }
+        }
+
+        return null;
+    }
+
     public boolean guardar(ListaDeCorreos lista){
 
         boolean abierto = abrir();
         if( !abierto ){
             return false;
         }
-        listas.add(lista);
+        getListas().add(lista);
 
         String nombreDeArchivo = "Listas.ecm";
 
@@ -101,7 +120,7 @@ public class AdministradoraListasDeCorreos {
          try
          {
            out = new ObjectOutputStream( new FileOutputStream(nombreDeArchivo) );
-           out.writeObject(listas);
+           out.writeObject(getListas());
            out.close();
          }
          catch(IOException ex)
@@ -111,6 +130,25 @@ public class AdministradoraListasDeCorreos {
          }
         return true;
    }
+
+    public boolean enviarLista(ListaDeCorreos lista, ServidorSMTP servidor){
+        lista.setServidorSMTP(servidor);
+        return EnviadoraDeCorreos.getInstancia().enviarLista(lista);
+    }
+
+    /**
+     * @return the listas
+     */
+    public LinkedList<ListaDeCorreos> getListas() {
+        return listas;
+    }
+
+    /**
+     * @param listas the listas to set
+     */
+    public void setListas(LinkedList<ListaDeCorreos> listas) {
+        this.listas = listas;
+    }
 
 
 }

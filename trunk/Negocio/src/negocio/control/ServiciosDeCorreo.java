@@ -1,14 +1,15 @@
 
 package negocio.control;
 
-import accesodatos.frontera.DriverBD;
 import accesodatos.frontera.consultoradeorigen.ConsultoraDeBD;
 import accesodatos.frontera.consultoradeorigen.ConsultoraDeOrigen;
 import accesodatos.frontera.consultoradeorigen.factory.ConsultoraDeOrigenFactory;
 import java.io.File;
+import java.util.LinkedList;
 import java.util.Properties;
 import negocio.entidades.ListaDeCorreos;
 import negocio.entidades.OrigenDeDatos;
+import negocio.entidades.ServidorSMTP;
 
 /**
  *
@@ -22,8 +23,12 @@ public class ServiciosDeCorreo {
         return true;
     }
 
-    public static ListaDeCorreos consultarListasDeCorreo(){
-        return null;
+    public static LinkedList<ListaDeCorreos> consultarListasDeCorreo(){
+        return AdministradoraListasDeCorreos.getInstancia().getListas();
+    }
+
+    public static LinkedList<ServidorSMTP> consultarServidoresSMTP(){
+        return ConfiguradoraServidorSMTP.getInstancia().getServidores();
     }
 
     public static ConsultoraDeBD consultarBD(String usuario, char[] contraseña, String driver, String protocolo , String direccion, String baseDeDatos){
@@ -73,6 +78,10 @@ public class ServiciosDeCorreo {
          AdministradoraListasDeCorreos.getInstancia().setColumnas(lista, columnas, asunto, mensaje, archivosAdjuntos);
          AdministradoraListasDeCorreos.getInstancia().guardar(lista);
      }
+
+     public static void enviarLista(ListaDeCorreos lista, ServidorSMTP servidor){
+         AdministradoraListasDeCorreos.getInstancia().enviarLista(lista, servidor);
+     }
      
     //--------------------------------------------------------------------------
     //funcionamiento casos de uso:
@@ -97,25 +106,35 @@ public class ServiciosDeCorreo {
 
         ListaDeCorreos lista = crearListaDeCorreos("listaDos", ConsultoraDeOrigenFactory.BD, datos);
 
+
+        Properties columnas = new Properties();
+        columnas.setProperty("#destinatariosTO#", "correos.correo");
+        columnas.setProperty("#nombre#", "prueba.nombre");
+        columnas.setProperty("#WHERE#", "id=id_correos AND id<=2");
+        String[] archivos = new String[1];
+        archivos[0]=("jack-the-black-cat-9439.jpg");
+        guardarLista(lista, columnas,"parece que ya", "<h1>Mensaje desde Servicios de correo</h1><br>ya me llegó al mio y nuestros nombres salen en el mensaje, todo desde una BD<br>nombre:#nombre#", archivos);
         System.out.println(lista.getNombre());
         System.out.println(lista.getOrigenDeDatos().getOrigen());
         System.out.println(lista.getOrigenDeDatos().getColumnas());
-
-        Properties columnas = new Properties();
-        columnas.setProperty("#nombre#", "prueba.nombre");
-        columnas.setProperty("#WHERE#", "id<=2");
-        String[] archivos = new String[1];
-        archivos[0]=("jack-the-black-cat-9439.jpg");
-        guardarLista(lista, columnas,"asunto", "nombre:#nombre#", archivos);
         //TODO asignar servidor SMTP
     }
 
     public static void main(String[] args) {
-//        ingresarListaDeCorreosBD();
+        System.out.println("INICIO");
+        ingresarListaDeCorreosBD();
         AdministradoraListasDeCorreos.getInstancia().abrir();
-        System.out.println(AdministradoraListasDeCorreos.getInstancia().listas.toString());
-        AdministradoraListasDeCorreos.getInstancia().listas.getFirst().getOrigenDeDatos().leerOrigenDeDatos();
-        EnviadoraDeCorreos.getInstancia().enviarLista(AdministradoraListasDeCorreos.getInstancia().listas.getFirst());
+        System.out.println(AdministradoraListasDeCorreos.getInstancia().getListas().toString());
+        AdministradoraListasDeCorreos.getInstancia().getListas().getFirst().getOrigenDeDatos().leerOrigenDeDatos();
+
+        ServidorSMTP servidorSMTP=new  ServidorSMTP();
+        servidorSMTP.setContrasena("AngelaJorgeElias".toCharArray());
+        servidorSMTP.setCorreoRemitente("secm.prueba@gmail.com");
+        servidorSMTP.setHost("smtp.gmail.com");
+        servidorSMTP.setPuerto(465);
+        servidorSMTP.setUsarSSL(true);
+        AdministradoraListasDeCorreos.getInstancia().getListas().getFirst().setServidorSMTP(servidorSMTP);
+        EnviadoraDeCorreos.getInstancia().enviarLista(AdministradoraListasDeCorreos.getInstancia().getListas().getFirst());
     }
 
 }
