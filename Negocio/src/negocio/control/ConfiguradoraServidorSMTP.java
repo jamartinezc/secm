@@ -11,7 +11,7 @@ import negocio.entidades.ServidorSMTP;
 public class ConfiguradoraServidorSMTP {
     
     private static ConfiguradoraServidorSMTP instancia;
-    private LinkedList servidores;
+    private LinkedList<ServidorSMTP> servidores;
 
     private ConfiguradoraServidorSMTP(){
         servidores = new LinkedList();
@@ -36,4 +36,7 @@ public class ConfiguradoraServidorSMTP {
         return true;
     }
 
+    public LinkedList<ServidorSMTP> getServidores() {
+        return servidores;
+    }
 }

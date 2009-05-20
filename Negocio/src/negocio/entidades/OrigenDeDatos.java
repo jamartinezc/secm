@@ -114,28 +114,30 @@ public class OrigenDeDatos implements Serializable{
             String[][] datos = comportamientoOrigen.consultarDatos(columnasAConsultar);
 
             //inicializar correo por correo con los datos principales
-            Iterator<String> etiquetasListIt = etiquetasList.iterator();
+            
             for(int i=0; i<datos.length;i++){//para cada correo
                 int j=0;
                 Correo correo = new Correo();
-                String mensajeActual=new String(mensaje);//TODO verificar
+                String mensajeActual=new String(mensaje);
                 correo.setAdjuntos(adjuntos);
                 correo.setAsunto(asunto);
-                    
+                
+                Iterator<String> etiquetasListIt = etiquetasList.iterator();
                 while (etiquetasListIt.hasNext()) {//por cada columna
                     String etiqueta = etiquetasListIt.next();
                     String columna=datos[i][j];
-                    
-                    if(etiqueta.equals("#destinatariosCC#")){
-                        correo.setDestinatariosCC(columna.split(","));
-                    }else if(etiqueta.equals("#destinatariosTO#")){
-                        correo.setDestinatariosTO(columna.split(","));
-                    }else if(etiqueta.equals("#destinatariosBCC#")){
-                        correo.setDestinatariosBCC(columna.split(","));
-                    }else{
-                        mensajeActual.replaceAll(etiqueta, columna);
+                    if( ! etiqueta.equalsIgnoreCase("#WHERE#") ){//ignorar la etiqueta where
+                        if(etiqueta.equals("#destinatariosCC#")){
+                            correo.setDestinatariosCC(columna.split(","));
+                        }else if(etiqueta.equals("#destinatariosTO#")){
+                            correo.setDestinatariosTO(columna.split(","));
+                        }else if(etiqueta.equals("#destinatariosBCC#")){
+                            correo.setDestinatariosBCC(columna.split(","));
+                        }else{
+                            mensajeActual=mensajeActual.replaceAll(etiqueta, columna);
+                        }
+                        j++;
                     }
-                    j++;
                 }
             correo.setMensaje(mensajeActual);
             correos.add(correo);
