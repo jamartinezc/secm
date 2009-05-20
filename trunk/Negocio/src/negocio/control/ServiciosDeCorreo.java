@@ -117,7 +117,6 @@ public class ServiciosDeCorreo {
         System.out.println(lista.getNombre());
         System.out.println(lista.getOrigenDeDatos().getOrigen());
         System.out.println(lista.getOrigenDeDatos().getColumnas());
-        //TODO asignar servidor SMTP
     }
 
     public static void main(String[] args) {

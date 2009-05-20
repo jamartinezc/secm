@@ -15,20 +15,20 @@ public class CorreoCalendarizado {
     
     private Date fechaEnvio;
     private long diasEntreEnvios;
-    transient private ListaDeCorreos correos;//TODO asignar la lista correspondiente al enviar
+    private String nombreDeLista;//TODO asignar la lista correspondiente al enviar
 
     public CorreoCalendarizado(){
         diasEntreEnvios=-1;
     }
 
-    public ListaDeCorreos getCorreos() {
-        return correos;
+    public String getNombreDeLista() {
+        return nombreDeLista;
     }
 
-    public void setCorreos(ListaDeCorreos correos) {
-        this.correos = correos;
+    public void setNombreDeLista(String nombreDeLista) {
+        this.nombreDeLista = nombreDeLista;
     }
-
+    
     public Date getFechaEnvio() {
         return fechaEnvio;
     }
