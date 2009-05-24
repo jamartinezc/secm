@@ -150,5 +150,10 @@ public class AdministradoraListasDeCorreos {
         this.listas = listas;
     }
 
+    public void eliminarRegistrosdeLista(String nombreLista, String[] correosAEliminar){
 
+        ListaDeCorreos lista = buscar(nombreLista);
+        //lista.getOrigenDeDatos().isModificable();
+        AdministradoraListaNoreceptores.getInstancia().agregarNoReceptores(lista.getNoReceptores(), correosAEliminar);
+    }
 }
