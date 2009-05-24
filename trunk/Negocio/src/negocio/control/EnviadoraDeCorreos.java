@@ -47,9 +47,47 @@ public class EnviadoraDeCorreos {
         Iterator<Correo> correoIt = correos.iterator();
 
         DriverCorreo driver = DriverCorreo.getInstancia();
-
+        AdministradoraListaNoreceptores a = AdministradoraListaNoreceptores.getInstancia();
         while (correoIt.hasNext()) {
             Correo correo = correoIt.next();
+            String[] TO = correo.getDestinatariosTO();
+            String[] CC = correo.getDestinatariosCC();
+            String[] BCC = correo.getDestinatariosBCC();
+
+//            if(a.contiene(lista.getNoReceptores(), correo.getDestinatariosTO())){
+////                || a.contiene(lista.getNoReceptores(), correo.getDestinatariosCC()) || a.contiene(lista.getNoReceptores(), correo.getDestinatariosBCC())
+//
+//
+//            }
+
+            //quitar a los noReceptores de los destinatarios
+            LinkedList<String> nuevoTO = new LinkedList<String>();
+            for (int i = 0; i < correo.getDestinatariosTO().length; i++) {
+                String destinatario = correo.getDestinatariosTO()[i];
+                if(! lista.getNoReceptores().buscarNoReceptor(destinatario) ){
+                    nuevoTO.add(destinatario);
+                }
+            }
+            correo.setDestinatariosTO(nuevoTO.toArray(new String[0]));
+
+
+            LinkedList<String> nuevoCC = new LinkedList<String>();
+            for (int i = 0; i < correo.getDestinatariosCC().length; i++) {
+                String destinatario = correo.getDestinatariosCC()[i];
+                if(! lista.getNoReceptores().buscarNoReceptor(destinatario) ){
+                    nuevoCC.add(destinatario);
+                }
+            }
+            correo.setDestinatariosTO(nuevoCC.toArray(new String[0]));
+
+            LinkedList<String> nuevoBCC = new LinkedList<String>();
+            for (int i = 0; i < correo.getDestinatariosBCC().length; i++) {
+                String destinatario = correo.getDestinatariosBCC()[i];
+                if(! lista.getNoReceptores().buscarNoReceptor(destinatario) ){
+                    nuevoBCC.add(destinatario);
+                }
+            }
+            correo.setDestinatariosBCC(nuevoBCC.toArray(new String[0]));
             try {
 //                driver.enviarCorreo(correo, lista.getServidorSMTP());
                 driver.enviarCorreo(lista.getServidorSMTP().getHost(),
@@ -68,8 +106,11 @@ public class EnviadoraDeCorreos {
                 ex.printStackTrace();
                 Logger.getLogger(EnviadoraDeCorreos.class.getName()).log(Level.SEVERE, null, ex);
                 errores = true;
+            }finally{
+                correo.setDestinatariosTO(TO);
+                correo.setDestinatariosCC(CC);
+                correo.setDestinatariosBCC(BCC);
             }
-            
         }
         return !errores;
     }

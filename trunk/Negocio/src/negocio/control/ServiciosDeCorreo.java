@@ -82,6 +82,10 @@ public class ServiciosDeCorreo {
      public static void enviarLista(ListaDeCorreos lista, ServidorSMTP servidor){
          AdministradoraListasDeCorreos.getInstancia().enviarLista(lista, servidor);
      }
+
+     public static void eliminarRegistrosdeLista(String nombreLista, String[] correosAEliminar){
+         AdministradoraListasDeCorreos.getInstancia().eliminarRegistrosdeLista(nombreLista, correosAEliminar);
+     }
      
     //--------------------------------------------------------------------------
     //funcionamiento casos de uso:

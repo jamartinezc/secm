@@ -2,12 +2,14 @@
 
 package accesodatos.frontera;
 
+import accesodatos.frontera.conectoraacorreo.ConectoraACorreo;
+import accesodatos.frontera.drivercorreo.Autenticadora;
 import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.mail.Authenticator;
+import javax.mail.Address;
+import javax.mail.Folder;
 import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
 import java.util.Properties;
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
@@ -16,12 +18,15 @@ import javax.mail.BodyPart;
 import javax.mail.Message;
 import javax.mail.Multipart;
 import javax.mail.Session;
+import javax.mail.Store;
 import javax.mail.Transport;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
+import javax.mail.search.SearchTerm;
+import javax.mail.search.SubjectTerm;
 
 /**
  *
@@ -39,45 +44,6 @@ public class DriverCorreo {
     }
 
     private DriverCorreo() {
-    }
-
-    private static class Autenticadora extends Authenticator{
-        private char[] contrasena;
-        private String correo;
-
-        /**
-         * @return the contrasena
-         */
-        public char[] getContrasena() {
-            return contrasena;
-        }
-
-        /**
-         * @param contrasena the contrasena to set
-         */
-        public void setContrasena(char[] contrasena) {
-            this.contrasena = contrasena;
-        }
-
-        /**
-         * @return the correo
-         */
-        public String getCorreo() {
-            return correo;
-        }
-
-        /**
-         * @param correo the correo to set
-         */
-        public void setCorreo(String correo) {
-            this.correo = correo;
-        }
-        
-        @Override
-        protected PasswordAuthentication getPasswordAuthentication() {
-            return new PasswordAuthentication(getCorreo(), String.copyValueOf(getContrasena()));
-        }
-
     }
 
     /**
@@ -178,6 +144,43 @@ public class DriverCorreo {
         //enviar el mensaje
         Transport.send(mensaje);
         System.out.println("Enviando correo...");
+    }
+
+    /**
+     * Busca un correo con el terminoDeBusqueda especificado en el asunto, en la bandeja de entrada del correo especficado por conectora, y retorna la lista de remitentes de los correos encontrados.
+     * @param conectora Conectora al correo en el cual se desea buscar
+     * @param terminoDeBusqueda Palabra a buscar en el asunto.
+     * @return Una lista de destinatarios de los correos encontrados o una lista vacia si no encuentra nada, o una lista con una o mas cadenas vacias, si uno o mas correos encontrados no tienen remitente
+     * @throws javax.mail.MessagingException si no se puede buscar en los correos.
+     */
+    public String[] verificarSiExisteCorreoPorAsunto(ConectoraACorreo conectora, String terminoDeBusqueda) throws MessagingException {
+
+        Store store = conectora.conectar();
+        Folder folder = store.getFolder("inbox");
+        Message[] mensajes = folder.search(new SubjectTerm(terminoDeBusqueda));
+        String[] resultados = new String[mensajes.length];
+        for (int i = 0; i < mensajes.length; i++) {
+            Message mensaje = mensajes[i];
+            Address[] from = mensaje.getFrom();
+            if(from != null){
+                if(from.length>=1){
+                    resultados[i] = from[0].toString();
+                }else{
+                    resultados[i] = "";
+                }
+            }else{
+                resultados[i] = "";
+            }
+        }
+
+        try {
+            folder.close(true);
+            store.close();
+        } catch (MessagingException ex) {//el usuario del metodo no tiene porque manejar el hecho que no se puedan cerrar.
+            Logger.getLogger(DriverCorreo.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
+        }
+            return resultados;
     }
 
     public static void main(String[] args) {

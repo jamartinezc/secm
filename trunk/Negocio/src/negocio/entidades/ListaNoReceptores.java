@@ -1,11 +1,9 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 
 package negocio.entidades;
 
 import java.io.Serializable;
+import java.util.Arrays;
+import negocio.entidades.chequeonoreceptores.ServidorDeEntrada;
 
 /**
  *
@@ -13,18 +11,34 @@ import java.io.Serializable;
  */
 public class ListaNoReceptores implements Serializable{
     
-    private String[] noReceptor;
+    private String[] noReceptores;
+    private String palabraDeEliminacion;
+    private ServidorDeEntrada servidorDeEntrada;//TODO agregarlo
 
     public ListaNoReceptores() {
-        this.noReceptor = new String[0];
+        this.noReceptores = new String[0];
     }
 
-    public String[] getNoReceptor() {
-        return noReceptor;
+    public boolean buscarNoReceptor(String correoNoReceptor) {
+        for (int i = 0; i < noReceptores.length; i++) {
+            if(noReceptores[i].equals(correoNoReceptor)){
+                return true;
+            }
+        }
+        return false;
     }
 
-    public void setNoReceptor(String[] noReceptor) {
-        this.noReceptor = noReceptor;
+    public void agregarNoReceptor(String noReceptor) {
+        String[] nuevaLista = Arrays.copyOf(noReceptores, noReceptores.length+1);
+        nuevaLista[nuevaLista.length-1]=noReceptor;
+        noReceptores=nuevaLista;
+    }
+
+    public int cantidad(){
+        if(noReceptores == null){
+            return 0;
+        }
+        return noReceptores.length;
     }
 
 }
