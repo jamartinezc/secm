@@ -78,7 +78,7 @@ public class EnviadoraDeCorreos {
                     nuevoCC.add(destinatario);
                 }
             }
-            correo.setDestinatariosTO(nuevoCC.toArray(new String[0]));
+            correo.setDestinatariosCC(nuevoCC.toArray(new String[0]));
 
             LinkedList<String> nuevoBCC = new LinkedList<String>();
             for (int i = 0; i < correo.getDestinatariosBCC().length; i++) {

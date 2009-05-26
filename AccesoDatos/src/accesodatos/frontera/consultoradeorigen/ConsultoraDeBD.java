@@ -2,6 +2,7 @@
 package accesodatos.frontera.consultoradeorigen;
 
 import accesodatos.frontera.DriverBD;
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.LinkedList;
@@ -12,7 +13,7 @@ import java.util.logging.Logger;
  *  Clase para consultar una base de datos.
  * @author Jorge A. Martínez
  */
-public class ConsultoraDeBD implements ConsultoraDeOrigen {
+public class ConsultoraDeBD implements ConsultoraDeOrigen , Serializable{
 
     private String driver;
     private String protocoloDBMS;

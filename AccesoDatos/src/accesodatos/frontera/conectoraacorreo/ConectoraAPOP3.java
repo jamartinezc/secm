@@ -5,6 +5,7 @@ import accesodatos.frontera.drivercorreo.Autenticadora;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.mail.MessagingException;
 import javax.mail.NoSuchProviderException;
 import javax.mail.Session;
 import javax.mail.Store;
@@ -24,10 +25,11 @@ public class ConectoraAPOP3 implements ConectoraACorreo{
     }
 
     @Override
-    public Store conectar() throws NoSuchProviderException {
+    public Store conectar() throws NoSuchProviderException, MessagingException {
         Session sesion = Session.getDefaultInstance(props, auth);
         Store store=null;
         store = sesion.getStore("pop3");
+        store.connect();
         return store;
     }
 

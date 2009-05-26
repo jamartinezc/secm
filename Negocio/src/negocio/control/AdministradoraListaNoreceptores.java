@@ -12,9 +12,12 @@ import negocio.entidades.ListaNoReceptores;
  */
 public class AdministradoraListaNoreceptores {
 
+    private Thread triggerChequeo;
+
     private static AdministradoraListaNoreceptores instancia;
 
     public static AdministradoraListaNoreceptores getInstancia() {
+        
         if(instancia == null){
             instancia = new AdministradoraListaNoreceptores();
         }
@@ -22,10 +25,13 @@ public class AdministradoraListaNoreceptores {
     }
 
     private AdministradoraListaNoreceptores(){
-        
+
+        triggerChequeo = new Thread(new TriggerDeNoReceptores());
+        triggerChequeo.start();
     }
 
     public ListaNoReceptores crearListaNoReceptores(){
+        
         ListaNoReceptores nuevaLista = new ListaNoReceptores();
         return nuevaLista;
     }
@@ -33,7 +39,9 @@ public class AdministradoraListaNoreceptores {
     public void agregarNoReceptores(ListaNoReceptores listaNoReceptores, String[] correos){
 
         for (int i = 0; i < correos.length; i++) {
-            listaNoReceptores.agregarNoReceptor(correos[i]);
+            if( ! correos[i].equals("") ){
+                listaNoReceptores.agregarNoReceptor(correos[i]);
+            }
         }
     }
 

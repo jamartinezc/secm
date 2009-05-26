@@ -3,8 +3,7 @@ package accesodatos.frontera.conectoraacorreo;
 
 import accesodatos.frontera.drivercorreo.Autenticadora;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.mail.MessagingException;
 import javax.mail.NoSuchProviderException;
 import javax.mail.Session;
 import javax.mail.Store;
@@ -17,6 +16,7 @@ public class ConectoraAIMAP implements ConectoraACorreo{
 
     private Properties props;
     private Autenticadora auth;
+    private Session sesion;
 
     public ConectoraAIMAP(){
 
@@ -25,11 +25,12 @@ public class ConectoraAIMAP implements ConectoraACorreo{
     }
 
     @Override
-    public Store conectar() throws NoSuchProviderException {
+    public Store conectar() throws NoSuchProviderException, MessagingException {
         
-        Session sesion = Session.getDefaultInstance(props, auth);
+        sesion = Session.getDefaultInstance(props, auth);
         Store store=null;
         store = sesion.getStore("imap");
+        store.connect();
         return store;
     }
 
@@ -55,13 +56,13 @@ public class ConectoraAIMAP implements ConectoraACorreo{
     @Override
     public void setPuerto(int puerto) {
 
-      props.setProperty("mail.pop3.port", String.valueOf(puerto));
+      props.setProperty("mail.imap.port", String.valueOf(puerto));
     }
 
     @Override
     public void setUsarSSL(boolean usarSSL) {
-
-      props.setProperty("mail.pop3.ssl.enable", String.valueOf(usarSSL));
+        
+      props.setProperty("mail.imap.ssl.enable", String.valueOf(usarSSL));
     }
 
 }

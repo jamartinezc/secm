@@ -5,21 +5,19 @@
 package negocio.control;
 
 import java.util.Calendar;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import negocio.entidades.CorreoCalendarizado;
 
 /**
  * Clase que evalua si es hora de enviar un correo.
  * @author Jorge A. Martínez
  */
-public class TriggerDeEnvio implements Runnable{
+public class TriggerDeEnvio implements Runnable {
 
     private boolean ejecutar;
 
     @Override
     public void run() {
-        ejecutar=true;
+        ejecutar=false;
         while(ejecutar){
             CorreoCalendarizado siguiente = ProgramadoraDeEnvios.getInstancia().getSiguienteEnvio();
             Calendar fechaActual = Calendar.getInstance();

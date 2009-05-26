@@ -38,7 +38,13 @@ public class AdministradoraListasDeCorreos {
     private AdministradoraListasDeCorreos(){
     }
 
-    public ListaDeCorreos crearListaDeCorreos(String nombre, int origen, Properties datos){
+    /**
+     *
+     * @param nombre el nombre de esta lista.
+     * @param origen Tipo de origen de datos, debe tomarse de ConsultoraDeOrigenFactory.
+     * @param datos Debe tener la property con key "rutaOrigen" correspondiente a la ruta de acceso al origen de los datos.
+     * @return
+     */public ListaDeCorreos crearListaDeCorreos(String nombre, int origen, Properties datos){
         
         ConsultoraDeOrigen cons = ConsultoraDeOrigenFactory.create(origen, datos);
         ListaDeCorreos lista = new ListaDeCorreos();
