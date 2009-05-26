@@ -40,6 +40,7 @@ public class ServiciosDeCorreo {
         return cd;
     }
 
+
     public static String[] columnasDisponibles(ConsultoraDeOrigen consultora){
         return consultora.consultarColumnasDisponibles();
     }
@@ -110,7 +111,6 @@ public class ServiciosDeCorreo {
 
         ListaDeCorreos lista = crearListaDeCorreos("listaDos", ConsultoraDeOrigenFactory.BD, datos);
 
-
         Properties columnas = new Properties();
         columnas.setProperty("#destinatariosTO#", "correos.correo");
         columnas.setProperty("#nombre#", "prueba.nombre");
@@ -123,21 +123,47 @@ public class ServiciosDeCorreo {
         System.out.println(lista.getOrigenDeDatos().getColumnas());
     }
 
-    public static void main(String[] args) {
-        System.out.println("INICIO");
-        ingresarListaDeCorreosBD();
-        AdministradoraListasDeCorreos.getInstancia().abrir();
-        System.out.println(AdministradoraListasDeCorreos.getInstancia().getListas().toString());
-        AdministradoraListasDeCorreos.getInstancia().getListas().getFirst().getOrigenDeDatos().leerOrigenDeDatos();
+    private static void ingresarListaDeCorreosArchivo(){
+        Properties datos = new Properties();
+        datos.setProperty("rutaOrigen", "empleados.csv");
+        
+        ListaDeCorreos lista = crearListaDeCorreos("listaUno", ConsultoraDeOrigenFactory.ARCHIVO_CVS, datos);
 
-        ServidorSMTP servidorSMTP=new  ServidorSMTP();
-        servidorSMTP.setContrasena("AngelaJorgeElias".toCharArray());
-        servidorSMTP.setCorreoRemitente("secm.prueba@gmail.com");
-        servidorSMTP.setHost("smtp.gmail.com");
-        servidorSMTP.setPuerto(465);
-        servidorSMTP.setUsarSSL(true);
-        AdministradoraListasDeCorreos.getInstancia().getListas().getFirst().setServidorSMTP(servidorSMTP);
-        EnviadoraDeCorreos.getInstancia().enviarLista(AdministradoraListasDeCorreos.getInstancia().getListas().getFirst());
+
+        columnasDisponibles(lista.getOrigenDeDatos().getComportamientoOrigen());
+        Properties columnas = new Properties();
+        columnas.setProperty("#destinatariosTO#", "correo");
+        columnas.setProperty("#nombre#", "nombre");
+        String[] archivos = new String[1];
+        archivos[0]=("jack-the-black-cat-9439.jpg");
+
+
+        guardarLista(lista, columnas,"prueba desde un .cvs", "<h1>Mensaje desde Servicios de correo</h1><br>va otro con datos tomados de un .cvs<br>nombre:#nombre#", archivos);
+
+        
+        System.out.println(lista.getNombre());
+        System.out.println(lista.getOrigenDeDatos().getOrigen());
+        System.out.println(lista.getOrigenDeDatos().getColumnas());
+    }
+
+    public static void main(String[] args) {
+        GuardarSMTP("smtp.gmail.com", 465, true, "secm.prueba@gmail.com", "AngelaJorgeElias".toCharArray());
+//        System.out.println("INICIO");
+//        ingresarListaDeCorreosArchivo();
+//        AdministradoraListasDeCorreos.getInstancia().abrir();
+//        System.out.println(AdministradoraListasDeCorreos.getInstancia().getListas().toString());
+////        AdministradoraListasDeCorreos.getInstancia().getListas().getFirst().getOrigenDeDatos().leerOrigenDeDatos();
+//
+//        ServidorSMTP servidorSMTP=new  ServidorSMTP();
+//        servidorSMTP.setContrasena("AngelaJorgeElias".toCharArray());
+//        servidorSMTP.setCorreoRemitente("secm.prueba@gmail.com");
+//        servidorSMTP.setHost("smtp.gmail.com");
+//        servidorSMTP.setPuerto(465);
+//        servidorSMTP.setUsarSSL(true);
+//        AdministradoraListasDeCorreos.getInstancia().getListas().getFirst().setServidorSMTP(servidorSMTP);
+////        EnviadoraDeCorreos.getInstancia().enviarLista();
+////        AdministradoraListasDeCorreos.getInstancia().getListas().getFirst().
+//        AdministradoraListasDeCorreos.getInstancia().enviarLista(AdministradoraListasDeCorreos.getInstancia().getListas().getFirst(), servidorSMTP);
     }
 
 }

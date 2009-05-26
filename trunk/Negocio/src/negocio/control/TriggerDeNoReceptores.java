@@ -1,7 +1,15 @@
 
 package negocio.control;
 
-import java.util.Calendar;
+import accesodatos.frontera.DriverCorreo;
+import accesodatos.frontera.conectoraacorreo.ConectoraACorreo;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.mail.MessagingException;
+import negocio.entidades.ListaDeCorreos;
+import negocio.entidades.ListaNoReceptores;
 
 /**
  *
@@ -13,20 +21,30 @@ public class TriggerDeNoReceptores implements Runnable{
 
     @Override
     public void run() {
-        ejecutar=true;
+        ejecutar=false;
         while(ejecutar){
-//            CorreoCalendarizado siguiente = ProgramadoraDeEnvios.getInstancia().getSiguienteEnvio();
-            Calendar fechaActual = Calendar.getInstance();
-            fechaActual.getTimeInMillis();
-//            if(fechaActual.getTimeInMillis() >= siguiente.getFechaEnvio().getTime()){
-//                //TODO registrar errores en el envío de correo
-//                ProgramadoraDeEnvios.getInstancia().enviarCorreo(siguiente);
-//            }
-//            try {
-//                Thread.sleep(siguiente.getFechaEnvio().getTime() - fechaActual.getTimeInMillis());
-//            } catch (InterruptedException ex) {
-//                System.out.println("Se ingresó un nuevo CorreoCalendarizado, evaluar si debe ser enviado primero.");
-//            }
+            LinkedList<ListaDeCorreos> listas = AdministradoraListasDeCorreos.getInstancia().getListas();
+
+            Iterator<ListaDeCorreos> it = listas.iterator();
+            while (it.hasNext()) {
+                ListaDeCorreos lista = it.next();
+                ConectoraACorreo servidor = lista.getNoReceptores().getServidorDeEntrada();
+                try {
+
+                    String[] correosAEliminar = DriverCorreo.getInstancia().verificarSiExisteCorreoPorAsunto(servidor, lista.getNoReceptores().getFraseDeEliminacion());
+                    ListaNoReceptores noReceptores = lista.getNoReceptores();
+                    AdministradoraListaNoreceptores.getInstancia().agregarNoReceptores(noReceptores, correosAEliminar);
+                    
+                } catch (MessagingException ex) {
+                    Logger.getLogger(TriggerDeNoReceptores.class.getName()).log(Level.SEVERE, null, ex);
+                    System.out.println("No se pudo verificar el correo: "+servidor);
+                }
+            }
+            try {
+                Thread.sleep(24*60*60*1000);//esperar 24 horas entre chequeos
+            } catch (InterruptedException ex) {
+                System.out.println("Se interrumpió la pausa de revición, revizando por no receptores...");
+            }
         }
     }
 

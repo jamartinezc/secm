@@ -3,6 +3,8 @@
 package accesodatos.frontera;
 
 import accesodatos.frontera.conectoraacorreo.ConectoraACorreo;
+import accesodatos.frontera.conectoraacorreo.ConectoraAIMAP;
+import accesodatos.frontera.conectoraacorreo.ConectoraAPOP3;
 import accesodatos.frontera.drivercorreo.Autenticadora;
 import java.io.File;
 import java.util.logging.Level;
@@ -156,7 +158,9 @@ public class DriverCorreo {
     public String[] verificarSiExisteCorreoPorAsunto(ConectoraACorreo conectora, String terminoDeBusqueda) throws MessagingException {
 
         Store store = conectora.conectar();
-        Folder folder = store.getFolder("inbox");
+        Folder folder = store.getDefaultFolder();
+        folder = store.getFolder("inbox");
+        folder.open(Folder.READ_ONLY);
         Message[] mensajes = folder.search(new SubjectTerm(terminoDeBusqueda));
         String[] resultados = new String[mensajes.length];
         for (int i = 0; i < mensajes.length; i++) {
@@ -164,7 +168,7 @@ public class DriverCorreo {
             Address[] from = mensaje.getFrom();
             if(from != null){
                 if(from.length>=1){
-                    resultados[i] = from[0].toString();
+                    resultados[i] = from[0].toString().substring(from[0].toString().indexOf('<')+1, from[0].toString().indexOf('>'));
                 }else{
                     resultados[i] = "";
                 }
@@ -183,37 +187,49 @@ public class DriverCorreo {
             return resultados;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws MessagingException {
 //        ServidorSMTP serv=new  ServidorSMTP();
 //        Correo correo  = new Correo();
-        DriverCorreo dc = getInstancia();
+//        DriverCorreo dc = getInstancia();
+//
+//        char[] contrasenia = ("AngelaJorgeElias".toCharArray());
+//        String correoRemitente = ("secm.prueba@gmail.com");
+//        String nombreServidorSMTP = ("smtp.gmail.com");
+//        int puertoSMTP = (465);
+//
+//        String[] TO = new String[1];
+//        TO[0]="jaguar.scratch@gmail.com";
+//        String[] CC = new String[0];
+//        String asunto = ("secm: prueba envío de correo");
+//        String textoMensaje = ("Esta es una prueba de envío de correo <br>" +
+//                          "<h1>con varios adjuntos</h1>(@)");
+//
+//        File[] adjuntos = new File[3];
+//        adjuntos[0]=new File("prueba.properties");
+//        adjuntos[1]=new File("prueba2.properties");
+//        adjuntos[2]=new File("jack-the-black-cat-9439.jpg");
+//
+//        try {
+//            dc.enviarCorreo(nombreServidorSMTP, puertoSMTP, "javax.net.ssl.SSLSocketFactory", correoRemitente, contrasenia, TO, CC, CC, asunto, textoMensaje, adjuntos);
+//        } catch (AddressException ex) {
+//            System.out.println("no existe la direccion");
+//            Logger.getLogger(DriverCorreo.class.getName()).log(Level.SEVERE, null, ex);
+//        } catch (MessagingException ex) {
+//            System.out.println("error desconocido: ");
+//            ex.printStackTrace();
+//            Logger.getLogger(DriverCorreo.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+        ConectoraACorreo conectora = new ConectoraAIMAP();
+        conectora.setHost("imap.gmail.com");
+        conectora.setPuerto(993);//993.5
+        conectora.setUsuario("secm.prueba@gmail.com");
+        conectora.setContrasena("AngelaJorgeElias");
+        conectora.setUsarSSL(true);
+        String[] res = DriverCorreo.getInstancia().verificarSiExisteCorreoPorAsunto(conectora, "ELIMINAR");
 
-        char[] contrasenia = ("AngelaJorgeElias".toCharArray());
-        String correoRemitente = ("secm.prueba@gmail.com");
-        String nombreServidorSMTP = ("smtp.gmail.com");
-        int puertoSMTP = (465);
-
-        String[] TO = new String[1];
-        TO[0]="jaguar.scratch@gmail.com";
-        String[] CC = new String[0];
-        String asunto = ("secm: prueba envío de correo");
-        String textoMensaje = ("Esta es una prueba de envío de correo <br>" +
-                          "<h1>con varios adjuntos</h1>(@)");
-
-        File[] adjuntos = new File[3];
-        adjuntos[0]=new File("prueba.properties");
-        adjuntos[1]=new File("prueba2.properties");
-        adjuntos[2]=new File("jack-the-black-cat-9439.jpg");
-
-        try {
-            dc.enviarCorreo(nombreServidorSMTP, puertoSMTP, "javax.net.ssl.SSLSocketFactory", correoRemitente, contrasenia, TO, CC, CC, asunto, textoMensaje, adjuntos);
-        } catch (AddressException ex) {
-            System.out.println("no existe la direccion");
-            Logger.getLogger(DriverCorreo.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (MessagingException ex) {
-            System.out.println("error desconocido: ");
-            ex.printStackTrace();
-            Logger.getLogger(DriverCorreo.class.getName()).log(Level.SEVERE, null, ex);
+        for (int i = 0; i < res.length; i++) {
+            String string = res[i];
+            System.out.println(string);
         }
     }
 }
