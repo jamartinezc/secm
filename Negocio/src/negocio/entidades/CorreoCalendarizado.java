@@ -5,13 +5,14 @@
 
 package negocio.entidades;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  *
  * @author Administrador
  */
-public class CorreoCalendarizado {
+public class CorreoCalendarizado implements Serializable {
     
     private Date fechaEnvio;
     private long diasEntreEnvios;

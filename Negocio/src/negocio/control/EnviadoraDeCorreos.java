@@ -103,7 +103,7 @@ public class EnviadoraDeCorreos {
                         correo.getAdjuntos());
             } catch (MessagingException ex) {
                 //TODO registrar errores en el log
-                ex.printStackTrace();
+                //ex.printStackTrace();
                 Logger.getLogger(EnviadoraDeCorreos.class.getName()).log(Level.SEVERE, null, ex);
                 errores = true;
             }finally{

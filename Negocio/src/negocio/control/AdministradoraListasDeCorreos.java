@@ -36,6 +36,7 @@ public class AdministradoraListasDeCorreos {
     }
 
     private AdministradoraListasDeCorreos(){
+        listas = new LinkedList<ListaDeCorreos>();
     }
 
     /**
@@ -101,11 +102,15 @@ public class AdministradoraListasDeCorreos {
      * @return La lista encontrada o <b>null</b> si no se encuentra.
      */
     public ListaDeCorreos buscar(String nombreLista){
-
+        
         for (Iterator<ListaDeCorreos> it = listas.iterator(); it.hasNext();) {
             ListaDeCorreos listaDeCorreos = it.next();
+            System.out.println("comparando con: "+listaDeCorreos+" para el nombre: "+nombreLista);
             if(listaDeCorreos.getNombre().equals(nombreLista)){
+                System.out.println("ENCONTRADO: "+listaDeCorreos+" buscando por: "+nombreLista);
                 return listaDeCorreos;
+            }else{
+                System.out.println("es diferente");
             }
         }
 
@@ -118,7 +123,15 @@ public class AdministradoraListasDeCorreos {
         if( !abierto ){
             return false;
         }
-        getListas().add(lista);
+        //no permitir listas duplicadas
+        ListaDeCorreos listaEncontrada = buscar(lista.getNombre());
+        if(listaEncontrada == null){//si la lista no existe
+            getListas().add(lista);//agregarla
+        }else{
+            //reemplazar la que existe
+            getListas().remove(listaEncontrada);
+            getListas().add(lista);
+        }
 
         String nombreDeArchivo = "Listas.ecm";
 

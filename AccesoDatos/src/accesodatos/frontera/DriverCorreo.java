@@ -74,7 +74,7 @@ public class DriverCorreo {
         Properties paramatrosCorreo = new Properties();
         paramatrosCorreo.put("mail.smtp.host", nombreServidorSMTP);
         paramatrosCorreo.put("mail.smtp.auth", "true");
-        paramatrosCorreo.put("mail.debug", "true");
+        paramatrosCorreo.put("mail.debug", "false");
         paramatrosCorreo.put("mail.smtp.port", String.valueOf(puertoSMTP));
         paramatrosCorreo.put("mail.smtp.socketFactory.port", String.valueOf(puertoSMTP));
         paramatrosCorreo.put("mail.smtp.socketFactory.class", SSLfactory);
