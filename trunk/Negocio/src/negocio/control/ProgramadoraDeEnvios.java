@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.sql.Time;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -78,6 +79,12 @@ public class ProgramadoraDeEnvios {
         if( !abierto ){
             return false;
         }
+
+        CorreoCalendarizado existente = buscar(calendarizado.getNombreDeLista());
+        if( existente != null ){
+            calendarizados.remove(existente);
+        }
+
         calendarizados.add(calendarizado);
 
         String nombreDeArchivo = "Calendarizados.ecm";
@@ -129,11 +136,22 @@ public class ProgramadoraDeEnvios {
     protected void enviarCorreo(CorreoCalendarizado siguiente) {
 
         ListaDeCorreos listaAEnviar = AdministradoraListasDeCorreos.getInstancia().buscar(siguiente.getNombreDeLista());
-        EnviadoraDeCorreos.getInstancia().enviarLista(listaAEnviar);
+        if(listaAEnviar != null){
+            EnviadoraDeCorreos.getInstancia().enviarLista(listaAEnviar);
+        }
+        long tParaEnvio = siguiente.getDiasEntreEnvios();
+        if(tParaEnvio > 0){
+            System.out.println("Reprogrmando envío...");
+            System.out.println("Envio actual: "+siguiente.getFechaEnvio());
+            siguiente.setFechaEnvio( new Date(Calendar.getInstance().getTimeInMillis() + tParaEnvio) );
+            ProgramadoraDeEnvios.getInstancia().guardar(siguiente);
+            System.out.println("Nuevo envio: "+siguiente.getFechaEnvio());
+        }
     }
 
     protected CorreoCalendarizado getSiguienteEnvio() {
 
+        boolean hayAlmenosUnCalendarizado=false;
         boolean abierto = abrir();
         if( !abierto ){
             return null;
@@ -141,6 +159,7 @@ public class ProgramadoraDeEnvios {
         CorreoCalendarizado calendarizadoSiguiente= new CorreoCalendarizado();
         calendarizadoSiguiente.setFechaEnvio(new Time(Long.MAX_VALUE));
         for (Iterator<CorreoCalendarizado> it = calendarizados.iterator(); it.hasNext();) {
+            hayAlmenosUnCalendarizado = true;
             CorreoCalendarizado correoCalendarizado = it.next();
             if( calendarizadoSiguiente.getFechaEnvio().getTime() > correoCalendarizado.getFechaEnvio().getTime() ){
                 calendarizadoSiguiente=correoCalendarizado;
@@ -153,6 +172,23 @@ public class ProgramadoraDeEnvios {
         }
 
         return calendarizadoSiguiente;
+    }
+
+    /**
+     * Busca un correo calendarizado para la lista de nombre indicado
+     * @param nombreCalendarizado el nombre a buscar en los calendarizados
+     * @return el CorreoCalendarizado encontrado o null si no encuentra nada.
+     */
+    private CorreoCalendarizado buscar(String nombreCalendarizado) {
+
+        Iterator<CorreoCalendarizado> it = calendarizados.iterator();
+        while (it.hasNext()) {
+            CorreoCalendarizado calendarizado = it.next();
+            if(calendarizado.getNombreDeLista().equals(nombreCalendarizado)){
+                return calendarizado;
+            }
+        }
+        return null;
     }
 
 }

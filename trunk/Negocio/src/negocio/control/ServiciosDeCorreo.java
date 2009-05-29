@@ -5,6 +5,8 @@ import accesodatos.frontera.consultoradeorigen.ConsultoraDeBD;
 import accesodatos.frontera.consultoradeorigen.ConsultoraDeOrigen;
 import accesodatos.frontera.consultoradeorigen.factory.ConsultoraDeOrigenFactory;
 import java.io.File;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.Properties;
 import negocio.entidades.ListaDeCorreos;
@@ -95,8 +97,36 @@ public class ServiciosDeCorreo {
     private static void EnviarCorreos(){
     }
     
-    private static void crearCorreosAEnviar(){
+    private static void programarCorreosAEnviar(){
+        //Crear la lista
+        Properties datos = new Properties();
+        datos.setProperty("rutaOrigen", "empleados.csv");
+
+        ListaDeCorreos lista = crearListaDeCorreos("listaUno", ConsultoraDeOrigenFactory.ARCHIVO_CVS, datos);
+
+        columnasDisponibles(lista.getOrigenDeDatos().getComportamientoOrigen());
+        Properties columnas = new Properties();
+        columnas.setProperty("#destinatariosTO#", "correo");
+        columnas.setProperty("#nombre#", "nombre");
+        String[] archivos = new String[1];
+        archivos[0]=("jack-the-black-cat-9439.jpg");
+
+        // crear el servidor SMTP
+//        ServidorSMTP servidorSMTP=new  ServidorSMTP();
+//        servidorSMTP.setContrasena("AngelaJorgeElias".toCharArray());
+//        servidorSMTP.setCorreoRemitente("secm.prueba@gmail.com");
+//        servidorSMTP.setHost("smtp.gmail.com");
+//        servidorSMTP.setPuerto(465);
+//        servidorSMTP.setUsarSSL(true);
+
+        ConfiguradoraServidorSMTP.getInstancia().CrearServidorSMTP("smtp.gmail.com", 465, true, "secm.prueba@gmail.com", "AngelaJorgeElias".toCharArray());
+        ServidorSMTP servidorSMTP=ConfiguradoraServidorSMTP.getInstancia().getServidores().getFirst();
         
+        guardarLista(lista, columnas,"prueba desde un .cvs", "<h1>Mensaje desde Servicios de correo</h1><br>va otro con datos tomados de un .cvs<br>nombre:#nombre#", archivos);
+
+        Calendar.getInstance().getTime();
+        Date fechaEnvio = new Date(Calendar.getInstance().getTime().getTime()+(1000*30));
+        ProgramadoraDeEnvios.getInstancia().programarEnvio(lista, servidorSMTP, fechaEnvio, (1000*30));
     }
 
     private static void ingresarListaDeCorreosBD(){
@@ -147,10 +177,11 @@ public class ServiciosDeCorreo {
     }
 
     public static void main(String[] args) {
-        GuardarSMTP("smtp.gmail.com", 465, true, "secm.prueba@gmail.com", "AngelaJorgeElias".toCharArray());
-//        System.out.println("INICIO");
+//        GuardarSMTP("smtp.gmail.com", 465, true, "secm.prueba@gmail.com", "AngelaJorgeElias".toCharArray());
+        AdministradoraListaNoreceptores.getInstancia();
+        ProgramadoraDeEnvios.getInstancia();
+        System.out.println("INICIO");
 //        ingresarListaDeCorreosArchivo();
-//        AdministradoraListasDeCorreos.getInstancia().abrir();
 //        System.out.println(AdministradoraListasDeCorreos.getInstancia().getListas().toString());
 ////        AdministradoraListasDeCorreos.getInstancia().getListas().getFirst().getOrigenDeDatos().leerOrigenDeDatos();
 //
@@ -161,9 +192,11 @@ public class ServiciosDeCorreo {
 //        servidorSMTP.setPuerto(465);
 //        servidorSMTP.setUsarSSL(true);
 //        AdministradoraListasDeCorreos.getInstancia().getListas().getFirst().setServidorSMTP(servidorSMTP);
-////        EnviadoraDeCorreos.getInstancia().enviarLista();
-////        AdministradoraListasDeCorreos.getInstancia().getListas().getFirst().
+//        EnviadoraDeCorreos.getInstancia().enviarLista();
+//        AdministradoraListasDeCorreos.getInstancia().getListas().getFirst().
 //        AdministradoraListasDeCorreos.getInstancia().enviarLista(AdministradoraListasDeCorreos.getInstancia().getListas().getFirst(), servidorSMTP);
+
+//        programarCorreosAEnviar();
     }
 
 }
