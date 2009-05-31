@@ -1,6 +1,8 @@
 
 package negocio.control;
 
+import accesodatos.frontera.conectoraacorreo.ConectoraACorreo;
+import accesodatos.frontera.conectoraacorreo.conectorafactory.ConectoraFactory;
 import accesodatos.frontera.consultoradeorigen.ConsultoraDeOrigen;
 import accesodatos.frontera.consultoradeorigen.factory.ConsultoraDeOrigenFactory;
 import java.io.File;
@@ -13,6 +15,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Properties;
 import negocio.entidades.ListaDeCorreos;
+import negocio.entidades.ListaNoReceptores;
 import negocio.entidades.OrigenDeDatos;
 import negocio.entidades.ServidorSMTP;
 
@@ -169,10 +172,19 @@ public class AdministradoraListasDeCorreos {
         this.listas = listas;
     }
 
-    public void eliminarRegistrosdeLista(String nombreLista, String[] correosAEliminar){
+    public void eliminarRegistrosdeLista(ListaDeCorreos lista, String[] correosAEliminar){
 
-        ListaDeCorreos lista = buscar(nombreLista);
         //lista.getOrigenDeDatos().isModificable();
         AdministradoraListaNoreceptores.getInstancia().agregarNoReceptores(lista.getNoReceptores(), correosAEliminar);
+        guardar(lista);
     }
+
+    public void ingresarServidorDeEliminacion(Properties datos, int tipo, String fraseDeEliminacion, ListaDeCorreos lista){
+
+        ConectoraACorreo conectora = ConectoraFactory.create(tipo, datos);
+        ListaNoReceptores noReceptores = lista.getNoReceptores();
+        noReceptores.setServidorDeEntrada(conectora, fraseDeEliminacion);
+
+        instancia.guardar(lista);
+     }
 }

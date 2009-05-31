@@ -56,7 +56,8 @@ public  class ConsultoraDeOrigenFactory {
      * 
      *
      * @return
-     */public static ConsultoraDeOrigen create(int tipo, Properties datos){
+     */
+    public static ConsultoraDeOrigen create(int tipo, Properties datos){
         ConsultoraDeOrigen o;
         switch(tipo){
             case BD:{

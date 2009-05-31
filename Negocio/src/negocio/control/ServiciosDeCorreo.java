@@ -1,6 +1,9 @@
 
 package negocio.control;
 
+import accesodatos.frontera.conectoraacorreo.ConectoraACorreo;
+import accesodatos.frontera.conectoraacorreo.ConectoraAIMAP;
+import accesodatos.frontera.conectoraacorreo.conectorafactory.ConectoraFactory;
 import accesodatos.frontera.consultoradeorigen.ConsultoraDeBD;
 import accesodatos.frontera.consultoradeorigen.ConsultoraDeOrigen;
 import accesodatos.frontera.consultoradeorigen.factory.ConsultoraDeOrigenFactory;
@@ -10,6 +13,7 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.Properties;
 import negocio.entidades.ListaDeCorreos;
+import negocio.entidades.ListaNoReceptores;
 import negocio.entidades.OrigenDeDatos;
 import negocio.entidades.ServidorSMTP;
 
@@ -42,6 +46,9 @@ public class ServiciosDeCorreo {
         return cd;
     }
 
+    public static void ingresarNoReceptores(ListaDeCorreos lista, String[] noReceptores){
+        AdministradoraListasDeCorreos.getInstancia().eliminarRegistrosdeLista(lista, noReceptores);
+    }
 
     public static String[] columnasDisponibles(ConsultoraDeOrigen consultora){
         return consultora.consultarColumnasDisponibles();
@@ -54,6 +61,7 @@ public class ServiciosDeCorreo {
     /**
      * Crea una ListaDeCorreos nueva, abre el origen.
      * @param origen Determina que tipo de origen de datos se tomará, debe ser tomado de ConsultoraDeOrigenFactory
+     * @see ConsultoraDeOrigenFactory
      * @param datos Properties del origen de datos, estos dependen de que origen se quiere.
      * @return la listaDeCorreo creada.
      */public static ListaDeCorreos crearListaDeCorreos(String nombre, int origen, Properties datos){
@@ -86,8 +94,31 @@ public class ServiciosDeCorreo {
          AdministradoraListasDeCorreos.getInstancia().enviarLista(lista, servidor);
      }
 
-     public static void eliminarRegistrosdeLista(String nombreLista, String[] correosAEliminar){
-         AdministradoraListasDeCorreos.getInstancia().eliminarRegistrosdeLista(nombreLista, correosAEliminar);
+     public static void eliminarRegistrosdeLista(ListaDeCorreos lista, String[] correosAEliminar){
+         AdministradoraListasDeCorreos.getInstancia().eliminarRegistrosdeLista(lista, correosAEliminar);
+     }
+
+     /**
+      * Ingresa un correo a verificar por correos de noReceptores
+      * @param host host del servidor de correo
+      * @param puerto puerto del servidor de correo
+      * @param usarSSL true - si se quiere usar <br> false - si no se desea usar
+      * @param usuario usuario de la cuenta de correo
+      * @param contrasena contraseña de la cuenta de correo
+      * @param tipo tipo de cuenta de correo, tomar valor de ConectoraFactory
+      * @see ConectoraFactory
+      * @param fraseDeEliminacion frase que debe tener el asunto si se quiere elminar de la cuenta
+      * @param noReceptores ListaDeNoReceptores a la que se quiere ingresar el correo
+      */
+     public static void ingresarServidorDeEliminacion(String host, String puerto, String usarSSL, String usuario, char[] contrasena, int tipo, String fraseDeEliminacion, ListaDeCorreos lista){
+        Properties datos = new Properties();
+        datos.setProperty("host", host);
+        datos.setProperty("puerto", puerto);
+        datos.setProperty("usarSSL", usarSSL);
+        datos.setProperty("usuario", usuario);
+        datos.setProperty("contrasena", String.valueOf(contrasena));
+
+        AdministradoraListasDeCorreos.getInstancia().ingresarServidorDeEliminacion(datos, tipo, fraseDeEliminacion, lista);
      }
      
     //--------------------------------------------------------------------------
@@ -99,17 +130,17 @@ public class ServiciosDeCorreo {
     
     private static void programarCorreosAEnviar(){
         //Crear la lista
-        Properties datos = new Properties();
-        datos.setProperty("rutaOrigen", "empleados.csv");
-
-        ListaDeCorreos lista = crearListaDeCorreos("listaUno", ConsultoraDeOrigenFactory.ARCHIVO_CVS, datos);
-
-        columnasDisponibles(lista.getOrigenDeDatos().getComportamientoOrigen());
-        Properties columnas = new Properties();
-        columnas.setProperty("#destinatariosTO#", "correo");
-        columnas.setProperty("#nombre#", "nombre");
-        String[] archivos = new String[1];
-        archivos[0]=("jack-the-black-cat-9439.jpg");
+//        Properties datos = new Properties();
+//        datos.setProperty("rutaOrigen", "empleados.csv");
+//
+//        ListaDeCorreos lista = crearListaDeCorreos("listaUno", ConsultoraDeOrigenFactory.ARCHIVO_CVS, datos);
+//
+//        columnasDisponibles(lista.getOrigenDeDatos().getComportamientoOrigen());
+//        Properties columnas = new Properties();
+//        columnas.setProperty("#destinatariosTO#", "correo");
+//        columnas.setProperty("#nombre#", "nombre");
+//        String[] archivos = new String[1];
+//        archivos[0]=("jack-the-black-cat-9439.jpg");
 
         // crear el servidor SMTP
 //        ServidorSMTP servidorSMTP=new  ServidorSMTP();
@@ -119,11 +150,13 @@ public class ServiciosDeCorreo {
 //        servidorSMTP.setPuerto(465);
 //        servidorSMTP.setUsarSSL(true);
 
-        ConfiguradoraServidorSMTP.getInstancia().CrearServidorSMTP("smtp.gmail.com", 465, true, "secm.prueba@gmail.com", "AngelaJorgeElias".toCharArray());
-        ServidorSMTP servidorSMTP=ConfiguradoraServidorSMTP.getInstancia().getServidores().getFirst();
+        ConfiguradoraServidorSMTP.getInstancia().CrearServidorSMTP("smtp.gmail.com", 465, true, "secm2.prueba@gmail.com", "AngelaJorgeElias".toCharArray());
+        ServidorSMTP servidorSMTP = ConfiguradoraServidorSMTP.getInstancia().getServidores().getFirst();
         
-        guardarLista(lista, columnas,"prueba desde un .cvs", "<h1>Mensaje desde Servicios de correo</h1><br>va otro con datos tomados de un .cvs<br>nombre:#nombre#", archivos);
+//        guardarLista(lista, columnas,"prueba desde un .cvs", "<h1>Mensaje desde Servicios de correo</h1><br>va otro con datos tomados de un .cvs<br>nombre:#nombre#", archivos);
 
+        AdministradoraListasDeCorreos.getInstancia().abrir();
+        ListaDeCorreos lista = AdministradoraListasDeCorreos.getInstancia().buscar("listaDos");
         Calendar.getInstance().getTime();
         Date fechaEnvio = new Date(Calendar.getInstance().getTime().getTime()+(1000*30));
         ProgramadoraDeEnvios.getInstancia().programarEnvio(lista, servidorSMTP, fechaEnvio, (1000*30));
@@ -157,7 +190,7 @@ public class ServiciosDeCorreo {
         Properties datos = new Properties();
         datos.setProperty("rutaOrigen", "empleados.csv");
         
-        ListaDeCorreos lista = crearListaDeCorreos("listaUno", ConsultoraDeOrigenFactory.ARCHIVO_CVS, datos);
+        ListaDeCorreos lista = crearListaDeCorreos("listaDos", ConsultoraDeOrigenFactory.ARCHIVO_CVS, datos);
 
 
         columnasDisponibles(lista.getOrigenDeDatos().getComportamientoOrigen());
@@ -168,8 +201,7 @@ public class ServiciosDeCorreo {
         archivos[0]=("jack-the-black-cat-9439.jpg");
 
 
-        guardarLista(lista, columnas,"prueba desde un .cvs", "<h1>Mensaje desde Servicios de correo</h1><br>va otro con datos tomados de un .cvs<br>nombre:#nombre#", archivos);
-
+        guardarLista(lista, columnas,"pruebas no remitente 2", "<h1>Mensaje desde Servicios de correo</h1><br>Este correo debería llegarle a Angela, pero no a mi<br>Su nombre es:#nombre#", archivos);
         
         System.out.println(lista.getNombre());
         System.out.println(lista.getOrigenDeDatos().getOrigen());
@@ -183,18 +215,31 @@ public class ServiciosDeCorreo {
         System.out.println("INICIO");
 //        ingresarListaDeCorreosArchivo();
 //        System.out.println(AdministradoraListasDeCorreos.getInstancia().getListas().toString());
-////        AdministradoraListasDeCorreos.getInstancia().getListas().getFirst().getOrigenDeDatos().leerOrigenDeDatos();
-//
 //        ServidorSMTP servidorSMTP=new  ServidorSMTP();
 //        servidorSMTP.setContrasena("AngelaJorgeElias".toCharArray());
 //        servidorSMTP.setCorreoRemitente("secm.prueba@gmail.com");
 //        servidorSMTP.setHost("smtp.gmail.com");
 //        servidorSMTP.setPuerto(465);
 //        servidorSMTP.setUsarSSL(true);
-//        AdministradoraListasDeCorreos.getInstancia().getListas().getFirst().setServidorSMTP(servidorSMTP);
-//        EnviadoraDeCorreos.getInstancia().enviarLista();
-//        AdministradoraListasDeCorreos.getInstancia().getListas().getFirst().
+//        ConfiguradoraServidorSMTP.getInstancia().abrir();
+//        ServidorSMTP servidorSMTP = ConfiguradoraServidorSMTP.getInstancia().getServidores().getFirst();
+//        AdministradoraListasDeCorreos.getInstancia().abrir();
 //        AdministradoraListasDeCorreos.getInstancia().enviarLista(AdministradoraListasDeCorreos.getInstancia().getListas().getFirst(), servidorSMTP);
+
+
+        //ingreso de no receptores a mano:
+//        String[] noReceptores = {"violetamf3@hotmail.com"};
+//        AdministradoraListasDeCorreos.getInstancia().abrir();
+//        ListaDeCorreos lista = AdministradoraListasDeCorreos.getInstancia().getListas().getFirst();
+//        ingresarNoReceptores(lista, noReceptores);
+//
+//        AdministradoraListasDeCorreos.getInstancia().abrir();
+//        ListaDeCorreos lista = AdministradoraListasDeCorreos.getInstancia().buscar("listaDos");
+//        String usuario = "secm.prueba@gmail.com";
+//        String contrasena = "AngelaJorgeElias";
+//        String host = "imap.gmail.com";
+//        ingresarServidorDeEliminacion(host, "993", "true", usuario, contrasena.toCharArray(), ConectoraFactory.IMAP, "ELIMINAME DE listaDos", lista);
+
 
 //        programarCorreosAEnviar();
     }

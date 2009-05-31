@@ -4,7 +4,6 @@ package negocio.entidades;
 import accesodatos.frontera.conectoraacorreo.ConectoraACorreo;
 import java.io.Serializable;
 import java.util.Arrays;
-import negocio.entidades.chequeonoreceptores.ServidorDeEntrada;
 
 /**
  *
@@ -14,7 +13,7 @@ public class ListaNoReceptores implements Serializable{
     
     private String[] noReceptores;
     private String fraseDeEliminacion;
-    private ConectoraACorreo servidorDeEntrada;//TODO agregarlo
+    private ConectoraACorreo servidorDeEntrada;
 
     public ListaNoReceptores() {
         this.noReceptores = new String[0];
@@ -47,6 +46,14 @@ public class ListaNoReceptores implements Serializable{
         fraseDeEliminacion = asuntoDeEliminacion;
     }
 
+    public void setFraseDeEliminacion(String fraseDeEliminacion) {
+        this.fraseDeEliminacion = fraseDeEliminacion;
+    }
+
+    public void setServidorDeEntrada(ConectoraACorreo servidorDeEntrada) {
+        this.servidorDeEntrada = servidorDeEntrada;
+    }
+
     public String getFraseDeEliminacion() {
         return fraseDeEliminacion;
     }
@@ -54,5 +61,12 @@ public class ListaNoReceptores implements Serializable{
     public ConectoraACorreo getServidorDeEntrada() {
         return servidorDeEntrada;
     }
-    
+
+    public String[] getNoReceptores() {
+        return noReceptores;
+    }
+
+    public void setNoReceptores(String[] noReceptores) {
+        this.noReceptores = noReceptores;
+    }
 }

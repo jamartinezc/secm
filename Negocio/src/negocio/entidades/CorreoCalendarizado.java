@@ -16,7 +16,7 @@ public class CorreoCalendarizado implements Serializable {
     
     private Date fechaEnvio;
     private long diasEntreEnvios;
-    private String nombreDeLista;//TODO asignar la lista correspondiente al enviar
+    private String nombreDeLista;
 
     public CorreoCalendarizado(){
         diasEntreEnvios=-1;

@@ -65,11 +65,7 @@ public class DriverCorreo {
      */
     public void enviarCorreo(String nombreServidorSMTP, int puertoSMTP, String SSLfactory, String correoRemitente, char[] contrasenia, String[] destinatariosTO, String[] destinatariosCC, String[] destinatariosBCC, String asunto, String textoMensaje, File[] adjuntos) throws MessagingException{
 
-//        String nombreServidorSMTP = servidorDeEnvio.getHost();
-//        String puertoSMTP = String.valueOf( servidorDeEnvio.getPuerto() );
-//        String SSLfactory = servidorDeEnvio.getSSL_FACTORY();
-//        String destinatario = servidorDeEnvio.getCorreoRemitente();
-//        char[] contrasenia = servidorDeEnvio.getContrasena();
+        //TODO verificar que el correo tenga remitentes.
 
         Properties paramatrosCorreo = new Properties();
         paramatrosCorreo.put("mail.smtp.host", nombreServidorSMTP);
