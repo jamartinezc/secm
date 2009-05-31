@@ -16,7 +16,7 @@ public class ConectoraAIMAP implements ConectoraACorreo{
 
     private Properties props;
     private Autenticadora auth;
-    private Session sesion;
+    transient private Session sesion;
 
     public ConectoraAIMAP(){
 
@@ -30,6 +30,8 @@ public class ConectoraAIMAP implements ConectoraACorreo{
         sesion = Session.getDefaultInstance(props, auth);
         Store store=null;
         store = sesion.getStore("imap");
+        System.out.println("props: "+props.toString());
+        System.out.println("user: "+auth.getCorreo()+"pass: "+String.valueOf(auth.getContrasena()));
         store.connect();
         return store;
     }

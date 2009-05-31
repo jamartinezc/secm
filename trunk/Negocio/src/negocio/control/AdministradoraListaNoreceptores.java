@@ -40,6 +40,7 @@ public class AdministradoraListaNoreceptores {
 
         for (int i = 0; i < correos.length; i++) {
             if( ! correos[i].equals("") ){
+                System.out.println("Eliminando a:"+correos[i]);
                 listaNoReceptores.agregarNoReceptor(correos[i]);
             }
         }

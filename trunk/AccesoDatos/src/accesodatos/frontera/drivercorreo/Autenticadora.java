@@ -4,10 +4,11 @@
 
 package accesodatos.frontera.drivercorreo;
 
+import java.io.Serializable;
 import javax.mail.Authenticator;
 import javax.mail.PasswordAuthentication;
 
-public class Autenticadora extends Authenticator{
+public class Autenticadora extends Authenticator implements Serializable{
         private char[] contrasena;
         private String correo;
 

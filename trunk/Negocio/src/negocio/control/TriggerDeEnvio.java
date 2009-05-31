@@ -17,7 +17,7 @@ public class TriggerDeEnvio implements Runnable {
 
     @Override
     public void run() {
-        ejecutar=true;
+        ejecutar=false;
         long dormir;
         while(ejecutar){
             CorreoCalendarizado siguiente = ProgramadoraDeEnvios.getInstancia().getSiguienteEnvio();

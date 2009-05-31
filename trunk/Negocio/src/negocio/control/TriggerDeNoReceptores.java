@@ -9,7 +9,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.mail.MessagingException;
 import negocio.entidades.ListaDeCorreos;
-import negocio.entidades.ListaNoReceptores;
 
 /**
  *
@@ -21,27 +20,30 @@ public class TriggerDeNoReceptores implements Runnable{
 
     @Override
     public void run() {
-        ejecutar=false;
+        ejecutar=true;
         while(ejecutar){
+            AdministradoraListasDeCorreos.getInstancia().abrir();
             LinkedList<ListaDeCorreos> listas = AdministradoraListasDeCorreos.getInstancia().getListas();
 
             Iterator<ListaDeCorreos> it = listas.iterator();
             while (it.hasNext()) {
                 ListaDeCorreos lista = it.next();
                 ConectoraACorreo servidor = lista.getNoReceptores().getServidorDeEntrada();
-                try {
+                if (servidor != null) {
+                    try {
 
-                    String[] correosAEliminar = DriverCorreo.getInstancia().verificarSiExisteCorreoPorAsunto(servidor, lista.getNoReceptores().getFraseDeEliminacion());
-                    ListaNoReceptores noReceptores = lista.getNoReceptores();
-                    AdministradoraListaNoreceptores.getInstancia().agregarNoReceptores(noReceptores, correosAEliminar);
-                    
-                } catch (MessagingException ex) {
-                    Logger.getLogger(TriggerDeNoReceptores.class.getName()).log(Level.SEVERE, null, ex);
-                    System.out.println("No se pudo verificar el correo: "+servidor);
-                }
+                        String[] correosAEliminar = DriverCorreo.getInstancia().verificarSiExisteCorreoPorAsunto(servidor, lista.getNoReceptores().getFraseDeEliminacion());
+                        //guardar la lista modificada
+                        AdministradoraListasDeCorreos.getInstancia().eliminarRegistrosdeLista(lista, correosAEliminar);
+
+                    } catch (MessagingException ex) {
+                        System.out.println("No se pudo verificar el correo: " + servidor);
+                    }
+                }else{System.out.println(lista.getNombre()+" no tiene servidor");}
             }
             try {
-                Thread.sleep(24*60*60*1000);//esperar 24 horas entre chequeos
+//                Thread.sleep(24*60*60*1000);//esperar 24 horas entre chequeos
+                Thread.sleep(30*1000);//para debug
             } catch (InterruptedException ex) {
                 System.out.println("Se interrumpió la pausa de revición, revizando por no receptores...");
             }
