@@ -33,7 +33,6 @@ public class IGConfiguracionServidorSMTP extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -41,7 +40,6 @@ public class IGConfiguracionServidorSMTP extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         thost = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
-        puerto = new javax.swing.JTextField();
         ssl = new javax.swing.JCheckBox();
         jLabel6 = new javax.swing.JLabel();
         tremitente = new javax.swing.JTextField();
@@ -49,8 +47,7 @@ public class IGConfiguracionServidorSMTP extends javax.swing.JFrame {
         clave = new javax.swing.JPasswordField();
         guardar = new javax.swing.JButton();
         cancelar = new javax.swing.JButton();
-        jPanel2 = new javax.swing.JPanel();
-        jPanel3 = new javax.swing.JPanel();
+        puerto = new javax.swing.JSpinner();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -161,74 +158,43 @@ public class IGConfiguracionServidorSMTP extends javax.swing.JFrame {
                 .addContainerGap(23, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("Conexión", jPanel1);
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 478, Short.MAX_VALUE)
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 352, Short.MAX_VALUE)
-        );
-
-        jTabbedPane1.addTab("tab2", jPanel2);
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 478, Short.MAX_VALUE)
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 352, Short.MAX_VALUE)
-        );
-
-        jTabbedPane1.addTab("tab3", jPanel3);
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 483, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(0, 12, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 13, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(0, 25, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 25, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void thostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_thostActionPerformed
-        // TODO add your handling code here:
-}//GEN-LAST:event_thostActionPerformed
+    private void cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelarActionPerformed
+        this.dispose();
+}//GEN-LAST:event_cancelarActionPerformed
 
     private void guardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardarActionPerformed
-                
-        String num;
-        
+
+        int port;
+
         host = thost.getText();
-        num = puerto.getText();
-        if (num.equals("")) 
-            port =0;
-        else 
-            port = Integer.parseInt(num);
-        
-        if(ssl.isSelected()) 
+        port = (Integer) puerto.getValue();
+        System.out.println(port);
+
+        if(ssl.isSelected())
             usarSSL = true;
         else
             usarSSL = false;
-        
+
         remitente = tremitente.getText();
         contraseña = clave.getPassword();
 
@@ -236,34 +202,34 @@ public class IGConfiguracionServidorSMTP extends javax.swing.JFrame {
         boolean datosIncorrectos = false;
         if( ! verificacion.VerificadoraDeURL.verificarURL(host) ){
             JOptionPane.showMessageDialog(this,
-                                    "la dirección de host ingresada no es correcta,\npor favor verifiquela e intente de nuevo.",
-                                    "Error al adicionar Servidor",
-                                    JOptionPane.ERROR_MESSAGE);
+                    "la dirección de host ingresada no es correcta,\npor favor verifiquela e intente de nuevo.",
+                    "Error al adicionar Servidor",
+                    JOptionPane.ERROR_MESSAGE);
             datosIncorrectos = true;
         }
 
         if( ! verificacion.VerificadoraDeCorreo.verificarCorreo(remitente) ){
             JOptionPane.showMessageDialog(this,
-                                    "la dirección de correo ingresada no es correcta,\npor favor verifiquela e intente de nuevo.",
-                                    "Error al adicionar Servidor",
-                                    JOptionPane.ERROR_MESSAGE);
+                    "la dirección de correo ingresada no es correcta,\npor favor verifiquela e intente de nuevo.",
+                    "Error al adicionar Servidor",
+                    JOptionPane.ERROR_MESSAGE);
             datosIncorrectos = true;
         }
-        
+
         if( ! datosIncorrectos ){
             boolean resultado = negocio.control.ServiciosDeCorreo.GuardarSMTP(host.trim(), port, usarSSL, remitente.trim(), contraseña);
             if( ! resultado ){
-            JOptionPane.showMessageDialog(this,
-                                    "Hubo un error al adicionar el servidor SMTP,\npor favor intente mas tarde.",
-                                    "Error al adicionar Servidor",
-                                    JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this,
+                        "Hubo un error al adicionar el servidor SMTP,\npor favor intente mas tarde.",
+                        "Error al adicionar Servidor",
+                        JOptionPane.ERROR_MESSAGE);
             }
         }
-    }//GEN-LAST:event_guardarActionPerformed
+}//GEN-LAST:event_guardarActionPerformed
 
-    private void cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelarActionPerformed
-        this.dispose();
-    }//GEN-LAST:event_cancelarActionPerformed
+    private void thostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_thostActionPerformed
+        // TODO add your handling code here:
+}//GEN-LAST:event_thostActionPerformed
     
     /**
      * @param args the command line arguments
@@ -288,10 +254,7 @@ public class IGConfiguracionServidorSMTP extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTextField puerto;
+    private javax.swing.JSpinner puerto;
     private javax.swing.JCheckBox ssl;
     private javax.swing.JTextField thost;
     private javax.swing.JTextField tremitente;
