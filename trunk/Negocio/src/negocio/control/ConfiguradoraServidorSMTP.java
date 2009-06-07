@@ -38,7 +38,7 @@ public class ConfiguradoraServidorSMTP {
         nuevoServidor.setHost(host);
         nuevoServidor.setPuerto(puerto);
         nuevoServidor.setUsarSSL(usarSSL);
-        nuevoServidor.guardar();
+//        nuevoServidor.guardar();
         guardar(nuevoServidor);
         return true;
     }

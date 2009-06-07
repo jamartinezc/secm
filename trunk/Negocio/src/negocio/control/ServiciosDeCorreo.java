@@ -1,8 +1,6 @@
 
 package negocio.control;
 
-import accesodatos.frontera.conectoraacorreo.ConectoraACorreo;
-import accesodatos.frontera.conectoraacorreo.ConectoraAIMAP;
 import accesodatos.frontera.conectoraacorreo.conectorafactory.ConectoraFactory;
 import accesodatos.frontera.consultoradeorigen.ConsultoraDeBD;
 import accesodatos.frontera.consultoradeorigen.ConsultoraDeOrigen;
@@ -12,8 +10,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.Properties;
+import negocio.entidades.CorreoCalendarizado;
 import negocio.entidades.ListaDeCorreos;
-import negocio.entidades.ListaNoReceptores;
 import negocio.entidades.OrigenDeDatos;
 import negocio.entidades.ServidorSMTP;
 
@@ -23,17 +21,19 @@ import negocio.entidades.ServidorSMTP;
  */
 public class ServiciosDeCorreo {
     
-    public static boolean GuardarSMTP(String host,int puerto, boolean usarSSL, String correoDestinatario, char[] contraseña){
+    public static boolean GuardarSMTP(String host,int puerto, boolean usarSSL, String correoRemitente, char[] contraseña){
         ConfiguradoraServidorSMTP configuradoraServidorSMTP = ConfiguradoraServidorSMTP.getInstancia();
-        configuradoraServidorSMTP.CrearServidorSMTP(host,puerto, usarSSL, correoDestinatario, contraseña);
+        configuradoraServidorSMTP.CrearServidorSMTP(host,puerto, usarSSL, correoRemitente, contraseña);
         return true;
     }
 
     public static LinkedList<ListaDeCorreos> consultarListasDeCorreo(){
+        AdministradoraListasDeCorreos.getInstancia().abrir();
         return AdministradoraListasDeCorreos.getInstancia().getListas();
     }
 
     public static LinkedList<ServidorSMTP> consultarServidoresSMTP(){
+        ConfiguradoraServidorSMTP.getInstancia().abrir();
         return ConfiguradoraServidorSMTP.getInstancia().getServidores();
     }
 
@@ -87,7 +87,11 @@ public class ServiciosDeCorreo {
              archivosAdjuntos[i]=new File(adjuntos[i]);
          }
          AdministradoraListasDeCorreos.getInstancia().setColumnas(lista, columnas, asunto, mensaje, archivosAdjuntos);
-         AdministradoraListasDeCorreos.getInstancia().guardar(lista);
+         AdministradoraListasDeCorreos.getInstancia().guardarLista(lista);
+     }
+
+     public static void eliminarLista(String nombre){
+         AdministradoraListasDeCorreos.getInstancia().eliminarLista(nombre);
      }
 
      public static void enviarLista(ListaDeCorreos lista, ServidorSMTP servidor){
@@ -119,6 +123,19 @@ public class ServiciosDeCorreo {
         datos.setProperty("contrasena", String.valueOf(contrasena));
 
         AdministradoraListasDeCorreos.getInstancia().ingresarServidorDeEliminacion(datos, tipo, fraseDeEliminacion, lista);
+     }
+
+     /**
+      * Retorna la lista de correos calendarizados.
+      * @return La lista solicitada
+      */
+     public static LinkedList<CorreoCalendarizado> consultarCorreosCalendarizados(){
+         return ProgramadoraDeEnvios.getInstancia().getCalendarizados();
+     }
+
+     public static ListaDeCorreos buscarListaDeCorreos(String nombreLista){
+         AdministradoraListasDeCorreos.getInstancia().abrir();
+         return AdministradoraListasDeCorreos.getInstancia().buscar(nombreLista);
      }
      
     //--------------------------------------------------------------------------

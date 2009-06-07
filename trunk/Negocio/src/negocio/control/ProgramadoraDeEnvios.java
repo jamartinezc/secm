@@ -61,7 +61,7 @@ public class ProgramadoraDeEnvios {
      */
     public boolean programarEnvio(ListaDeCorreos lista, ServidorSMTP servidorDeEnvio, Date fechaEnvio, long tiempoDeReenvio){
         lista.setServidorSMTP(servidorDeEnvio);
-        AdministradoraListasDeCorreos.getInstancia().guardar(lista);
+        AdministradoraListasDeCorreos.getInstancia().guardarLista(lista);
         
         CorreoCalendarizado calendarizado = new CorreoCalendarizado();
         calendarizado.setNombreDeLista(lista.getNombre());
@@ -133,20 +133,20 @@ public class ProgramadoraDeEnvios {
        return true;
     }
 
-    protected void enviarCorreo(CorreoCalendarizado siguiente) {
+    protected void enviarCorreo(CorreoCalendarizado correoAEnviar) {
 
         AdministradoraListasDeCorreos.getInstancia().abrir();
-        ListaDeCorreos listaAEnviar = AdministradoraListasDeCorreos.getInstancia().buscar(siguiente.getNombreDeLista());
+        ListaDeCorreos listaAEnviar = AdministradoraListasDeCorreos.getInstancia().buscar(correoAEnviar.getNombreDeLista());
         if(listaAEnviar != null){
             EnviadoraDeCorreos.getInstancia().enviarLista(listaAEnviar);
         }
-        long tParaEnvio = siguiente.getDiasEntreEnvios();
+        long tParaEnvio = correoAEnviar.getDiasEntreEnvios();
         if(tParaEnvio > 0){
             System.out.println("Reprogrmando envío...");
-            System.out.println("Envio actual: "+siguiente.getFechaEnvio());
-            siguiente.setFechaEnvio( new Date(Calendar.getInstance().getTimeInMillis() + tParaEnvio) );
-            ProgramadoraDeEnvios.getInstancia().guardar(siguiente);
-            System.out.println("Nuevo envio: "+siguiente.getFechaEnvio());
+            System.out.println("Envio actual: "+correoAEnviar.getFechaEnvio());
+            correoAEnviar.setFechaEnvio( new Date(Calendar.getInstance().getTimeInMillis() + tParaEnvio) );
+            ProgramadoraDeEnvios.getInstancia().guardar(correoAEnviar);
+            System.out.println("Nuevo envio: "+correoAEnviar.getFechaEnvio());
         }
     }
 
@@ -192,4 +192,13 @@ public class ProgramadoraDeEnvios {
         return null;
     }
 
+    public LinkedList<CorreoCalendarizado> getCalendarizados() {
+        abrir();
+        System.out.println(calendarizados);
+        return calendarizados;
+    }
+
+    public static void main(String[] args) {
+        getInstancia().getCalendarizados();
+    }
 }

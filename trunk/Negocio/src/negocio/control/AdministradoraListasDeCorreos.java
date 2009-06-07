@@ -27,6 +27,7 @@ import negocio.entidades.ServidorSMTP;
 public class AdministradoraListasDeCorreos {
 
     private LinkedList<ListaDeCorreos> listas;
+    private static final String nombreDeArchivo = "Listas.ecm";
 
     private static AdministradoraListasDeCorreos instancia;
 
@@ -72,12 +73,10 @@ public class AdministradoraListasDeCorreos {
 
     public boolean abrir(){
 
-       String nombreDeArchivo = "Listas.ecm";
-
        ObjectInputStream in = null;
        try
        {
-         File archivo = new File( "Listas.ecm" );
+         File archivo = new File( nombreDeArchivo );
          if( archivo.length() > 0){
              in = new ObjectInputStream(new FileInputStream(nombreDeArchivo));
                 setListas((LinkedList<ListaDeCorreos>) in.readObject());
@@ -120,7 +119,7 @@ public class AdministradoraListasDeCorreos {
         return null;
     }
 
-    public boolean guardar(ListaDeCorreos lista){
+    public boolean guardarLista(ListaDeCorreos lista){
 
         boolean abierto = abrir();
         if( !abierto ){
@@ -129,14 +128,17 @@ public class AdministradoraListasDeCorreos {
         //no permitir listas duplicadas
         ListaDeCorreos listaEncontrada = buscar(lista.getNombre());
         if(listaEncontrada == null){//si la lista no existe
-            getListas().add(lista);//agregarla
+            listas.add(lista);//agregarla
         }else{
             //reemplazar la que existe
-            getListas().remove(listaEncontrada);
-            getListas().add(lista);
+            listas.remove(listaEncontrada);
+            listas.add(lista);
         }
 
-        String nombreDeArchivo = "Listas.ecm";
+        return guardarListas();
+   }
+
+    private boolean guardarListas(){
 
         ObjectOutputStream out = null;
          try
@@ -151,7 +153,7 @@ public class AdministradoraListasDeCorreos {
            return false;
          }
         return true;
-   }
+    }
 
     public boolean enviarLista(ListaDeCorreos lista, ServidorSMTP servidor){
         lista.setServidorSMTP(servidor);
@@ -176,7 +178,13 @@ public class AdministradoraListasDeCorreos {
 
         //lista.getOrigenDeDatos().isModificable();
         AdministradoraListaNoreceptores.getInstancia().agregarNoReceptores(lista.getNoReceptores(), correosAEliminar);
-        guardar(lista);
+        guardarLista(lista);
+    }
+
+    public void eliminarLista(String nombreLista){
+        ListaDeCorreos listaAEliminar = buscar(nombreLista);
+        listas.remove(listaAEliminar);
+        guardarListas();
     }
 
     public void ingresarServidorDeEliminacion(Properties datos, int tipo, String fraseDeEliminacion, ListaDeCorreos lista){
@@ -185,6 +193,6 @@ public class AdministradoraListasDeCorreos {
         ListaNoReceptores noReceptores = lista.getNoReceptores();
         noReceptores.setServidorDeEntrada(conectora, fraseDeEliminacion);
 
-        instancia.guardar(lista);
+        instancia.guardarLista(lista);
      }
 }
