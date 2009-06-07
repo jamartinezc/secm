@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<java version="1.6.0_11" class="java.beans.XMLDecoder"> 
+ <object class="negocio.entidades.ServidorSMTP"> 
+  <void property="contrasena"> 
+   <array class="char" length="16"> 
+    <void index="0"> 
+     <char>A</char> 
+    </void> 
+    <void index="1"> 
+     <char>n</char> 
+    </void> 
+    <void index="2"> 
+     <char>g</char> 
+    </void> 
+    <void index="3"> 
+     <char>e</char> 
+    </void> 
+    <void index="4"> 
+     <char>l</char> 
+    </void> 
+    <void index="5"> 
+     <char>a</char> 
+    </void> 
+    <void index="6"> 
+     <char>J</char> 
+    </void> 
+    <void index="7"> 
+     <char>o</char> 
+    </void> 
+    <void index="8"> 
+     <char>r</char> 
+    </void> 
+    <void index="9"> 
+     <char>g</char> 
+    </void> 
+    <void index="10"> 
+     <char>e</char> 
+    </void> 
+    <void index="11"> 
+     <char>E</char> 
+    </void> 
+    <void index="12"> 
+     <char>l</char> 
+    </void> 
+    <void index="13"> 
+     <char>i</char> 
+    </void> 
+    <void index="14"> 
+     <char>a</char> 
+    </void> 
+    <void index="15"> 
+     <char>s</char> 
+    </void> 
+   </array> 
+  </void> 
+  <void property="correoRemitente"> 
+   <string>secm2.prueba@gmail.com</string> 
+  </void> 
+  <void property="host"> 
+   <string>smtp.gmail.com</string> 
+  </void> 
+  <void property="puerto"> 
+   <int>465</int> 
+  </void> 
+ </object> 
+</java> 

@@ -5,7 +5,7 @@
  */
 
 package presentacion;
-import negocio.control.ConfiguradoraServidorSMTP;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -86,6 +86,11 @@ public class IGConfiguracionServidorSMTP extends javax.swing.JFrame {
         });
 
         cancelar.setText("Cancelar");
+        cancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancelarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -116,7 +121,7 @@ public class IGConfiguracionServidorSMTP extends javax.swing.JFrame {
                             .addComponent(tremitente, javax.swing.GroupLayout.DEFAULT_SIZE, 179, Short.MAX_VALUE))))
                 .addContainerGap(37, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(287, Short.MAX_VALUE)
+                .addContainerGap(285, Short.MAX_VALUE)
                 .addComponent(guardar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(cancelar)
@@ -209,8 +214,7 @@ public class IGConfiguracionServidorSMTP extends javax.swing.JFrame {
 }//GEN-LAST:event_thostActionPerformed
 
     private void guardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardarActionPerformed
-        // TODO add your handling code here:
-        
+                
         String num;
         
         host = thost.getText();
@@ -227,10 +231,39 @@ public class IGConfiguracionServidorSMTP extends javax.swing.JFrame {
         
         remitente = tremitente.getText();
         contraseña = clave.getPassword();
+
+        //verifcar campos
+        boolean datosIncorrectos = false;
+        if( ! verificacion.VerificadoraDeURL.verificarURL(host) ){
+            JOptionPane.showMessageDialog(this,
+                                    "la dirección de host ingresada no es correcta,\npor favor verifiquela e intente de nuevo.",
+                                    "Error al adicionar Servidor",
+                                    JOptionPane.ERROR_MESSAGE);
+            datosIncorrectos = true;
+        }
+
+        if( ! verificacion.VerificadoraDeCorreo.verificarCorreo(remitente) ){
+            JOptionPane.showMessageDialog(this,
+                                    "la dirección de correo ingresada no es correcta,\npor favor verifiquela e intente de nuevo.",
+                                    "Error al adicionar Servidor",
+                                    JOptionPane.ERROR_MESSAGE);
+            datosIncorrectos = true;
+        }
         
-        negocio.control.ServiciosDeCorreo.GuardarSMTP(num, port, usarSSL, remitente, contraseña);
-        
+        if( ! datosIncorrectos ){
+            boolean resultado = negocio.control.ServiciosDeCorreo.GuardarSMTP(host.trim(), port, usarSSL, remitente.trim(), contraseña);
+            if( ! resultado ){
+            JOptionPane.showMessageDialog(this,
+                                    "Hubo un error al adicionar el servidor SMTP,\npor favor intente mas tarde.",
+                                    "Error al adicionar Servidor",
+                                    JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }//GEN-LAST:event_guardarActionPerformed
+
+    private void cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelarActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_cancelarActionPerformed
     
     /**
      * @param args the command line arguments

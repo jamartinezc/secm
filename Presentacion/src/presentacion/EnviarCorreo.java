@@ -11,6 +11,14 @@
 
 package presentacion;
 
+import java.util.Iterator;
+import java.util.LinkedList;
+import negocio.control.AdministradoraListasDeCorreos;
+import negocio.control.ConfiguradoraServidorSMTP;
+import negocio.control.ServiciosDeCorreo;
+import negocio.entidades.ListaDeCorreos;
+import negocio.entidades.ServidorSMTP;
+
 /**
  *
  * @author Administrador
@@ -20,6 +28,39 @@ public class EnviarCorreo extends javax.swing.JFrame {
     /** Creates new form EnviarCorreo */
     public EnviarCorreo() {
         initComponents();
+        inicializarListas();
+    }
+
+    public EnviarCorreo(IGEnvioDeCorreo parent) {
+        this.parent = parent;
+        initComponents();
+        inicializarListas();
+    }
+
+    public EnviarCorreo(IGEnvioDeCorreo parent, String lista, String servidor){
+        this.parent = parent;
+        initComponents();
+        inicializarListas();
+
+        listas.setSelectedItem(lista);
+        servidores.setSelectedItem(servidor);
+    }
+
+    public void inicializarListas(){
+        LinkedList<ListaDeCorreos> listasC = ServiciosDeCorreo.consultarListasDeCorreo();
+        LinkedList<ServidorSMTP> servicoresC = ServiciosDeCorreo.consultarServidoresSMTP();
+        Iterator<ListaDeCorreos> listasCit = listasC.iterator();
+        Iterator<ServidorSMTP> servicoresCit = servicoresC.iterator();
+
+        while (listasCit.hasNext()) {
+            ListaDeCorreos listaDeCorreos = listasCit.next();
+            listas.addItem(listaDeCorreos.getNombre());
+        }
+
+        while (servicoresCit.hasNext()) {
+            ServidorSMTP servidorSMTP = servicoresCit.next();
+            servidores.addItem(servidorSMTP.getCorreoRemitente());
+        }
     }
 
     /** This method is called from within the constructor to
@@ -35,7 +76,7 @@ public class EnviarCorreo extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox();
+        servidores = new javax.swing.JComboBox();
         jRadioButton1 = new javax.swing.JRadioButton();
         jPanel1 = new javax.swing.JPanel();
         jRadioButton2 = new javax.swing.JRadioButton();
@@ -52,18 +93,16 @@ public class EnviarCorreo extends javax.swing.JFrame {
         jLabel10 = new javax.swing.JLabel();
         enviar = new javax.swing.JButton();
         cancelar = new javax.swing.JButton();
-        jComboBox2 = new javax.swing.JComboBox();
+        listas = new javax.swing.JComboBox();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14));
         jLabel1.setText("ENVÍO DE CORREOS");
 
         jLabel2.setText("Listado de Correos:");
 
         jLabel3.setText("Listado de SMTP:");
-
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "(ninguno)" }));
 
         buttonGroup1.add(jRadioButton1);
         jRadioButton1.setText("Enviar Ahora");
@@ -165,6 +204,11 @@ public class EnviarCorreo extends javax.swing.JFrame {
         );
 
         enviar.setText("Enviar");
+        enviar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                enviarActionPerformed(evt);
+            }
+        });
 
         cancelar.setText("Cancelar");
         cancelar.addActionListener(new java.awt.event.ActionListener() {
@@ -172,8 +216,6 @@ public class EnviarCorreo extends javax.swing.JFrame {
                 cancelarActionPerformed(evt);
             }
         });
-
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "(ninguno)" }));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -194,8 +236,8 @@ public class EnviarCorreo extends javax.swing.JFrame {
                                             .addComponent(jLabel2))
                                         .addGap(18, 18, 18)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                            .addComponent(jComboBox2, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(jComboBox1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                            .addComponent(listas, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(servidores, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(enviar)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -215,12 +257,12 @@ public class EnviarCorreo extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(listas, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(servidores, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(19, 19, 19)
                 .addComponent(jRadioButton1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -236,7 +278,7 @@ public class EnviarCorreo extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton2ActionPerformed
-        // TODO add your handling code here:
+        
 
         dia.setEditable(true);
         mes.setEditable(true);
@@ -245,7 +287,7 @@ public class EnviarCorreo extends javax.swing.JFrame {
     }//GEN-LAST:event_jRadioButton2ActionPerformed
 
     private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton1ActionPerformed
-        // TODO add your handling code here:
+       
         dia.setEditable(false);
         mes.setEditable(false);
         año.setEditable(false);
@@ -253,15 +295,21 @@ public class EnviarCorreo extends javax.swing.JFrame {
     }//GEN-LAST:event_jRadioButton1ActionPerformed
 
     private void cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelarActionPerformed
-        // TODO add your handling code here:
+        
         this.dispose();
     }//GEN-LAST:event_cancelarActionPerformed
+
+    private void enviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_enviarActionPerformed
+        ServidorSMTP servidor = ConfiguradoraServidorSMTP.getInstancia().buscar((String) servidores.getSelectedItem());
+        ListaDeCorreos lista = AdministradoraListasDeCorreos.getInstancia().buscar((String) listas.getSelectedItem());
+        ServiciosDeCorreo.enviarLista(lista, servidor);
+    }//GEN-LAST:event_enviarActionPerformed
 
     /**
     * @param args the command line arguments
     */
     public static void main(String args[]) {
-                try
+        try
         {
             javax.swing.UIManager.setLookAndFeel(javax.swing.UIManager.getSystemLookAndFeelClassName());
         }
@@ -277,14 +325,15 @@ public class EnviarCorreo extends javax.swing.JFrame {
         });
     }
 
+    //Variables de clase
+    private IGEnvioDeCorreo parent;
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField año;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton cancelar;
     private javax.swing.JTextField dia;
     private javax.swing.JButton enviar;
-    private javax.swing.JComboBox jComboBox1;
-    private javax.swing.JComboBox jComboBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
@@ -298,8 +347,10 @@ public class EnviarCorreo extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JRadioButton jRadioButton1;
     private javax.swing.JRadioButton jRadioButton2;
+    private javax.swing.JComboBox listas;
     private javax.swing.JTextField mes;
     private javax.swing.JSpinner periodo;
+    private javax.swing.JComboBox servidores;
     // End of variables declaration//GEN-END:variables
 
 }
