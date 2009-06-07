@@ -11,6 +11,7 @@
 
 package presentacion;
 
+import java.util.Properties;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -22,6 +23,11 @@ public class ConfiguracionArchivo extends javax.swing.JFrame {
 
     /** Creates new form ConfiguracionArchivo */
     public ConfiguracionArchivo() {
+        initComponents();
+    }
+
+    public ConfiguracionArchivo(IGListaDeCorreos parent) {
+        this.parent = parent;
         initComponents();
     }
 
@@ -41,9 +47,9 @@ public class ConfiguracionArchivo extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         archivo = new javax.swing.JTextField();
         aceptar = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        cancelar = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14));
         jLabel1.setText("Configuración Origen de Datos por Archivo");
@@ -65,8 +71,18 @@ public class ConfiguracionArchivo extends javax.swing.JFrame {
 
         aceptar.setText("Aceptar");
         aceptar.setEnabled(false);
+        aceptar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                aceptarActionPerformed(evt);
+            }
+        });
 
-        jButton3.setText("Cancelar");
+        cancelar.setText("Cancelar");
+        cancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancelarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -90,7 +106,7 @@ public class ConfiguracionArchivo extends javax.swing.JFrame {
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                         .addComponent(archivo, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButton3)))))
+                                .addComponent(cancelar)))))
                 .addContainerGap(31, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(271, Short.MAX_VALUE)
@@ -114,7 +130,7 @@ public class ConfiguracionArchivo extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(aceptar)
-                    .addComponent(jButton3))
+                    .addComponent(cancelar))
                 .addContainerGap(23, Short.MAX_VALUE))
         );
 
@@ -126,17 +142,28 @@ public class ConfiguracionArchivo extends javax.swing.JFrame {
 
             JFileChooser chooser = new JFileChooser();
             FileNameExtensionFilter filter = new FileNameExtensionFilter(
-                "Archivos de Excel", "xls", "xlsx");
+                "Archivos CVS", "cvs");
                  chooser.setFileFilter(filter);
             int returnVal = chooser.showOpenDialog(this);
     if(returnVal == JFileChooser.APPROVE_OPTION) {
-       archivo.setText(chooser.getSelectedFile().getAbsolutePath());
+        archivo.setText(chooser.getSelectedFile().getAbsolutePath());
 
-    aceptar.setEnabled(true);
+        aceptar.setEnabled(true);
        
     }
 
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelarActionPerformed
+        this.dispose();
+}//GEN-LAST:event_cancelarActionPerformed
+
+    private void aceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aceptarActionPerformed
+        Properties datos = new Properties();
+        datos.setProperty("rutaOrigen", archivo.getText());
+        parent.crearLista(accesodatos.frontera.consultoradeorigen.factory.ConsultoraDeOrigenFactory.ARCHIVO_CVS, datos);
+        this.dispose();
+    }//GEN-LAST:event_aceptarActionPerformed
 
     /**
     * @param args the command line arguments
@@ -149,11 +176,14 @@ public class ConfiguracionArchivo extends javax.swing.JFrame {
         });
     }
 
+    //variables de clase
+    private IGListaDeCorreos parent;
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton aceptar;
     private javax.swing.JTextField archivo;
+    private javax.swing.JButton cancelar;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

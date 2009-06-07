@@ -145,21 +145,7 @@ public class ConfiguracionBD extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
     
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-//        java.awt.EventQueue.invokeLater(new Runnable() {
-//            public void run() {
-//                ConfiguracionBD loquesea = new ConfiguracionBD();
-//                loquesea.setVisible(true);
-//            }
-//        });
-        ConfiguracionBD loquesea = new ConfiguracionBD();
-        loquesea.setVisible(true);
-        Dialog dialog = new Dialog(loquesea, true);
-        dialog.setVisible(true);
-    }
+    
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
