@@ -20,7 +20,7 @@ public class TriggerDeNoReceptores implements Runnable{
 
     @Override
     public void run() {
-        ejecutar=true;
+        ejecutar=false;
         while(ejecutar){
             AdministradoraListasDeCorreos.getInstancia().abrir();
             LinkedList<ListaDeCorreos> listas = AdministradoraListasDeCorreos.getInstancia().getListas();
