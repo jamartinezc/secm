@@ -113,12 +113,15 @@ public class NuevaLista extends javax.swing.JDialog {
         {
             ConfiguracionArchivo x = new ConfiguracionArchivo(parent);
             x.setVisible(true);
+            x.toFront();
         }
         else
         {
             ConfiguracionBD y = new ConfiguracionBD();
             y.setVisible(true);
+            y.toFront();
         }
+        parent.toBack();
         parent.setNombreNuevaLista(nombreLista.getText());
         this.dispose();
 }//GEN-LAST:event_aceptarActionPerformed
