@@ -13,6 +13,7 @@ package presentacion;
 
 import java.util.Iterator;
 import java.util.LinkedList;
+import javax.swing.JOptionPane;
 import negocio.control.AdministradoraListasDeCorreos;
 import negocio.control.ConfiguradoraServidorSMTP;
 import negocio.control.ServiciosDeCorreo;
@@ -292,6 +293,8 @@ public class EnviarCorreo extends javax.swing.JFrame {
         mes.setEditable(false);
         año.setEditable(false);
         periodo.setEnabled(false);
+        int puerto = (Integer)(periodo.getValue());
+        System.out.println("");
     }//GEN-LAST:event_jRadioButton1ActionPerformed
 
     private void cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelarActionPerformed
@@ -302,7 +305,14 @@ public class EnviarCorreo extends javax.swing.JFrame {
     private void enviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_enviarActionPerformed
         ServidorSMTP servidor = ConfiguradoraServidorSMTP.getInstancia().buscar((String) servidores.getSelectedItem());
         ListaDeCorreos lista = AdministradoraListasDeCorreos.getInstancia().buscar((String) listas.getSelectedItem());
-        ServiciosDeCorreo.enviarLista(lista, servidor);
+        boolean resultado = ServiciosDeCorreo.enviarLista(lista, servidor);
+        if( ! resultado ){
+            JOptionPane.showMessageDialog(this,
+                    "No fue posible enviar el correo, por favor, intente mas tarde.",
+                    "Error Enviar el correo",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+        this.dispose();
     }//GEN-LAST:event_enviarActionPerformed
 
     /**

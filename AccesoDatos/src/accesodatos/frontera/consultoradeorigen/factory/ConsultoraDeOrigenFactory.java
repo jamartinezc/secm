@@ -15,7 +15,7 @@ import java.util.Properties;
 public  class ConsultoraDeOrigenFactory {
     public static final int BD=1;
     public static final int ARCHIVO_CVS=2;
-
+    
 
     /**
      * Crea una ConsultoraDeOrigen de la implementación indicada con tipo.

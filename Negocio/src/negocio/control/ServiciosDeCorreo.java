@@ -94,8 +94,8 @@ public class ServiciosDeCorreo {
          AdministradoraListasDeCorreos.getInstancia().eliminarLista(nombre);
      }
 
-     public static void enviarLista(ListaDeCorreos lista, ServidorSMTP servidor){
-         AdministradoraListasDeCorreos.getInstancia().enviarLista(lista, servidor);
+     public static boolean enviarLista(ListaDeCorreos lista, ServidorSMTP servidor){
+         return AdministradoraListasDeCorreos.getInstancia().enviarLista(lista, servidor);
      }
 
      public static void eliminarRegistrosdeLista(ListaDeCorreos lista, String[] correosAEliminar){

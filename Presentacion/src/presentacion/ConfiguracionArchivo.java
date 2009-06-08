@@ -43,7 +43,7 @@ public class ConfiguracionArchivo extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        examinar = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         archivo = new javax.swing.JTextField();
         aceptar = new javax.swing.JButton();
@@ -58,10 +58,10 @@ public class ConfiguracionArchivo extends javax.swing.JFrame {
 
         jLabel3.setText("contienen los correos:");
 
-        jButton1.setText("Examinar...");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        examinar.setText("Examinar...");
+        examinar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                examinarActionPerformed(evt);
             }
         });
 
@@ -110,7 +110,7 @@ public class ConfiguracionArchivo extends javax.swing.JFrame {
                 .addContainerGap(31, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(271, Short.MAX_VALUE)
-                .addComponent(jButton1)
+                .addComponent(examinar)
                 .addGap(40, 40, 40))
         );
         layout.setVerticalGroup(
@@ -124,7 +124,7 @@ public class ConfiguracionArchivo extends javax.swing.JFrame {
                 .addComponent(jLabel3)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
+                    .addComponent(examinar)
                     .addComponent(jLabel4)
                     .addComponent(archivo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
@@ -137,8 +137,7 @@ public class ConfiguracionArchivo extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+    private void examinarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_examinarActionPerformed
 
             JFileChooser chooser = new JFileChooser();
             FileNameExtensionFilter filter = new FileNameExtensionFilter(
@@ -152,7 +151,7 @@ public class ConfiguracionArchivo extends javax.swing.JFrame {
        
     }
 
-    }//GEN-LAST:event_jButton1ActionPerformed
+}//GEN-LAST:event_examinarActionPerformed
 
     private void cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelarActionPerformed
         this.dispose();
@@ -162,6 +161,8 @@ public class ConfiguracionArchivo extends javax.swing.JFrame {
         Properties datos = new Properties();
         datos.setProperty("rutaOrigen", archivo.getText());
         parent.crearLista(accesodatos.frontera.consultoradeorigen.factory.ConsultoraDeOrigenFactory.ARCHIVO_CVS, datos);
+        GuardarCorreo dialog = new GuardarCorreo(parent);
+        dialog.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_aceptarActionPerformed
 
@@ -183,7 +184,7 @@ public class ConfiguracionArchivo extends javax.swing.JFrame {
     private javax.swing.JButton aceptar;
     private javax.swing.JTextField archivo;
     private javax.swing.JButton cancelar;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton examinar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
