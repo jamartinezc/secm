@@ -242,17 +242,15 @@ public class IGListaDeCorreos extends javax.swing.JFrame {
     }
 
     protected void crearLista(int origen, Properties datos){
-        ListaDeCorreos lista = ServiciosDeCorreo.crearListaDeCorreos(nombreNuevaLista, origen, datos);
+        nuevaLista = ServiciosDeCorreo.crearListaDeCorreos(nombreNuevaLista, origen, datos);
+    }
 
-        //TODO seleccionar los siguientes datos desde la interfáz
-        ServiciosDeCorreo.columnasDisponibles(lista.getOrigenDeDatos().getComportamientoOrigen());
-        Properties columnas = new Properties();
-        columnas.setProperty("#destinatariosTO#", "correo");
-        columnas.setProperty("#nombre#", "nombre");
-        String[] archivos = new String[0];
+    protected String[] getColumnasDisponibles(){
+        return ServiciosDeCorreo.columnasDisponibles(nuevaLista.getOrigenDeDatos().getComportamientoOrigen());
+    }
 
-        //TODO mover esta llamada a la interfáz de ingreso de los datos anteriores
-        ServiciosDeCorreo.guardarLista(lista, columnas,"pruebas GUI", "<h1>Mensaje desde IGListaDeCorreos</h1><br>Su nombre es:#nombre#", archivos);
+    protected void guardarLista( Properties columnas, String asunto, String mensaje, String[] adjuntos){
+        ServiciosDeCorreo.guardarLista(nuevaLista,columnas,asunto,mensaje,adjuntos);
         inicializarLista();
         this.repaint();
     }
@@ -278,6 +276,7 @@ public class IGListaDeCorreos extends javax.swing.JFrame {
 
     //Variables de vista:
     private LinkedList<ListaDeCorreos> listasDeCorreos;
+    private ListaDeCorreos nuevaLista;
     private String nombreNuevaLista;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

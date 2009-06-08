@@ -11,8 +11,19 @@
 
 package presentacion;
 
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.URL;
+import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
-import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.JOptionPane;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.html.HTMLEditorKit;
 
 /**
  *
@@ -22,6 +33,13 @@ public class GuardarCorreo extends javax.swing.JFrame {
 
     /** Creates new form GuardarCorreo */
     public GuardarCorreo() {
+        columnasAñadidas = new Properties();
+        initComponents();
+    }
+
+    public GuardarCorreo(IGListaDeCorreos parent) {
+        this.parent2 = parent;
+        columnasAñadidas = new Properties();
         initComponents();
     }
 
@@ -34,64 +52,120 @@ public class GuardarCorreo extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jTextField1 = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        asunto = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jEditorPane1 = new javax.swing.JEditorPane();
-        jButton1 = new javax.swing.JButton();
+        mensaje = new javax.swing.JEditorPane();
+        cargar = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList();
-        jButton2 = new javax.swing.JButton();
+        columnas = new javax.swing.JList();
+        añadir = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
         adjuntos = new javax.swing.JList();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        insertar = new javax.swing.JButton();
+        examinar = new javax.swing.JButton();
+        quitar = new javax.swing.JButton();
+        eliminar = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
+        aceptar = new javax.swing.JButton();
+        cancelar = new javax.swing.JButton();
+        jLabel6 = new javax.swing.JLabel();
+        para = new javax.swing.JTextField();
+        ingresar = new javax.swing.JButton();
+
+        jTextField1.setText("jTextField1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setMinimumSize(new java.awt.Dimension(690, 500));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 3, 18)); // NOI18N
-        jLabel1.setText("Guardar Correo");
+        jLabel1.setText("Mensaje a enviar");
 
         jLabel2.setText("Asunto:");
 
         jLabel3.setText("Mensaje:");
 
-        jScrollPane1.setViewportView(jEditorPane1);
+        mensaje.setContentType("text/html");
+        jScrollPane1.setViewportView(mensaje);
 
-        jButton1.setText("Cargar HTML...");
-
-        jLabel4.setText("Adjuntar:");
-
-        jList1.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "(ninguno)" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
-        });
-        jScrollPane2.setViewportView(jList1);
-
-        jButton2.setText("Añadir...");
-
-        adjuntos.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "(ninguno)" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
-        });
-        jScrollPane3.setViewportView(adjuntos);
-
-        jButton3.setText("Insertar en el Mensaje");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        cargar.setText("Cargar HTML...");
+        cargar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                cargarActionPerformed(evt);
             }
         });
 
-        jButton4.setText("Examinar...");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        jLabel4.setText("Adjuntar:");
+
+        columnas.setModel(columnasModel);
+        jScrollPane2.setViewportView(columnas);
+
+        añadir.setText("Añadir a la lista...");
+        añadir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                añadirActionPerformed(evt);
+            }
+        });
+
+        adjuntos.setModel(archivosModel);
+        jScrollPane3.setViewportView(adjuntos);
+
+        insertar.setText("Insertar en el Mensaje");
+        insertar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                insertarActionPerformed(evt);
+            }
+        });
+
+        examinar.setText("Examinar...");
+        examinar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                examinarActionPerformed(evt);
+            }
+        });
+
+        quitar.setText("Quitar");
+        quitar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                quitarActionPerformed(evt);
+            }
+        });
+
+        eliminar.setText("Eliminar de la lista");
+        eliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                eliminarActionPerformed(evt);
+            }
+        });
+
+        jLabel5.setText("Etiquetas:");
+
+        aceptar.setText("Aceptar");
+        aceptar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                aceptarActionPerformed(evt);
+            }
+        });
+
+        cancelar.setText("Cancelar");
+        cancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancelarActionPerformed(evt);
+            }
+        });
+
+        jLabel6.setText("Para:");
+
+        para.setEditable(false);
+
+        ingresar.setText("Ingresar");
+        ingresar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ingresarActionPerformed(evt);
             }
         });
 
@@ -100,95 +174,202 @@ public class GuardarCorreo extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel3))
-                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
+                        .addGap(176, 176, 176)
+                        .addComponent(jLabel1))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addContainerGap()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jButton1)
-                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel4)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jLabel6))
+                                .addGap(14, 14, 14)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(39, 39, 39)
-                                        .addComponent(jButton2))
-                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jButton3)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 389, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(19, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(quitar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(examinar)))
+                                    .addComponent(asunto, javax.swing.GroupLayout.DEFAULT_SIZE, 391, Short.MAX_VALUE)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addComponent(para, javax.swing.GroupLayout.DEFAULT_SIZE, 312, Short.MAX_VALUE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(ingresar))))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(70, 70, 70)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                        .addComponent(cargar)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 120, Short.MAX_VALUE)
+                                        .addComponent(aceptar)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(cancelar))
+                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 391, Short.MAX_VALUE))))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton4)
-                        .addGap(192, 192, 192))))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(176, 176, 176)
-                .addComponent(jLabel1)
-                .addContainerGap(186, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(eliminar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(insertar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(añadir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(21, 21, 21)
+                .addContainerGap()
                 .addComponent(jLabel1)
-                .addGap(18, 18, 18)
+                .addGap(13, 13, 13)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel6)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(para, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(ingresar)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel4)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton4))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(asunto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(examinar)
+                            .addComponent(jLabel4))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(quitar)
+                            .addComponent(jLabel3)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(cargar)
+                            .addComponent(cancelar)
+                            .addComponent(aceptar)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton2)
+                        .addComponent(añadir)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton3)))
-                .addContainerGap(156, Short.MAX_VALUE))
+                        .addComponent(insertar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(eliminar)))
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
+    private void insertarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertarActionPerformed
+        int cursor = mensaje.getCaretPosition();
+        try {
+            mensaje.getDocument().insertString(cursor, (String) columnas.getSelectedValue(), null);
+        } catch (BadLocationException ex) {
+            //No insertar la etiqueta
+        }
+}//GEN-LAST:event_insertarActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
-         JFileChooser chooser = new JFileChooser();
-            FileNameExtensionFilter filter = new FileNameExtensionFilter(
-                "");
-                 chooser.setFileFilter(filter);
-            int returnVal = chooser.showOpenDialog(this);
-    if(returnVal == JFileChooser.APPROVE_OPTION) {
-        archivo.setText(chooser.getSelectedFile().getAbsolutePath());
+    private void examinarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_examinarActionPerformed
+        JFileChooser chooser = new JFileChooser();
+        chooser.setDialogTitle("Adjunto");
+        int returnVal = chooser.showOpenDialog(this);
+        if(returnVal == JFileChooser.APPROVE_OPTION) {
+            archivosModel.addElement(chooser.getSelectedFile().getAbsolutePath());
+        }
+}//GEN-LAST:event_examinarActionPerformed
 
-        aceptar.setEnabled(true);
+    private void quitarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quitarActionPerformed
+        Object seleccionado = adjuntos.getSelectedValue();
+        archivosModel.removeElement( seleccionado );
+}//GEN-LAST:event_quitarActionPerformed
 
+    private void añadirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_añadirActionPerformed
+        SeleccionarColumnas dialog = new SeleccionarColumnas(this, true);
+        dialog.setSeleccionandoRemitente(false);
+        dialog.setVisible(true);
+    }//GEN-LAST:event_añadirActionPerformed
+
+    private void eliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eliminarActionPerformed
+        Object seleccionado = columnas.getSelectedValue();
+        columnasModel.removeElement(seleccionado);
+}//GEN-LAST:event_eliminarActionPerformed
+
+    private void cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelarActionPerformed
+        this.dispose();
+}//GEN-LAST:event_cancelarActionPerformed
+
+    private void aceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aceptarActionPerformed
+        int cantidadDeAdjuntos = adjuntos.getModel().getSize();
+        String[] archivos = new String[ cantidadDeAdjuntos ];
+
+        for (int i = 0; i < archivos.length; i++) {
+            archivos[i]=(String) adjuntos.getModel().getElementAt(i);
+        }
+        
+//        parent2.guardarLista(columnasAñadidas, asunto.getText(), mensaje.getText(), archivos);
+        HTMLEditorKit editor = new HTMLEditorKit();
+        String mensajeEnHTML = new String();
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        try {
+            editor.write(os, mensaje.getDocument(), 0, mensaje.getDocument().getLength());
+            mensajeEnHTML = os.toString();
+//            System.out.println("HTML:\n\n"+mensajeEnHTML);
+            parent2.guardarLista(columnasAñadidas, asunto.getText(), mensajeEnHTML, archivos);
+        } catch (IOException ex) {
+            //nunca se lanzará
+        } catch (BadLocationException ex) {
+            //nunca se lanzará
+        }
+
+        this.dispose();
+    }//GEN-LAST:event_aceptarActionPerformed
+
+    private void cargarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cargarActionPerformed
+        JFileChooser chooser = new JFileChooser();
+        chooser.setDialogTitle("Mensaje de los correos a enviar");
+        int returnVal = chooser.showOpenDialog(this);
+        if(returnVal == JFileChooser.APPROVE_OPTION) {
+            try {
+//                mensaje.setPage(chooser.getSelectedFile().getAbsolutePath());
+                mensaje.setPage(chooser.getSelectedFile().toURI().toURL());
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(this,
+                        "No se pudo cargar el mensaje, por favor verifique que\n" +
+                        "el achivo no está siendo usado por otro programa.",
+                        "Error de lectura",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_cargarActionPerformed
+
+    private void ingresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ingresarActionPerformed
+        SeleccionarColumnas dialog = new SeleccionarColumnas(this, true);
+        dialog.setSeleccionandoRemitente(true);
+        dialog.setVisible(true);
+}//GEN-LAST:event_ingresarActionPerformed
+
+    protected void añadirColumna(String id, String etiqueta){
+        columnasAñadidas.setProperty(etiqueta, id);
+        columnasModel.addElement(etiqueta);
     }
-    }//GEN-LAST:event_jButton4ActionPerformed
+
+    protected void setPara(String id, String etiqueta){
+        etiqueta="#destinatariosTO#";
+        columnasAñadidas.setProperty(etiqueta, id);
+        para.setText(id);
+    }
 
     /**
     * @param args the command line arguments
@@ -201,22 +382,41 @@ public class GuardarCorreo extends javax.swing.JFrame {
         });
     }
 
+    public IGListaDeCorreos getParent2() {
+        return parent2;
+    }
+
+    //Variables de clase
+    private IGListaDeCorreos parent2;
+    private Properties columnasAñadidas;
+
+    private DefaultListModel archivosModel = new DefaultListModel();
+    private DefaultListModel columnasModel = new DefaultListModel();
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton aceptar;
     private javax.swing.JList adjuntos;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JEditorPane jEditorPane1;
+    private javax.swing.JTextField asunto;
+    private javax.swing.JButton añadir;
+    private javax.swing.JButton cancelar;
+    private javax.swing.JButton cargar;
+    private javax.swing.JList columnas;
+    private javax.swing.JButton eliminar;
+    private javax.swing.JButton examinar;
+    private javax.swing.JButton ingresar;
+    private javax.swing.JButton insertar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JList jList1;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JEditorPane mensaje;
+    private javax.swing.JTextField para;
+    private javax.swing.JButton quitar;
     // End of variables declaration//GEN-END:variables
 
 }

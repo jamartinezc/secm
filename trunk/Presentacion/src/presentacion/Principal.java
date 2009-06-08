@@ -19,6 +19,14 @@ public class Principal extends javax.swing.JFrame {
 
     /** Creates new form Principal */
     public Principal() {
+        try
+        {
+            javax.swing.UIManager.setLookAndFeel(javax.swing.UIManager.getSystemLookAndFeelClassName());
+        }
+        catch(Exception ex)
+        {
+            //Dejar el look and feel de java
+        }
         initComponents();
     }
 
@@ -39,8 +47,9 @@ public class Principal extends javax.swing.JFrame {
         jButton4 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("SECM");
 
-        jLabel1.setFont(new java.awt.Font("Georgia", 3, 24)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Georgia", 3, 24));
         jLabel1.setText("SECM");
 
         jLabel2.setText("Sistema de Envío de Correos Masivos");
@@ -113,29 +122,26 @@ public class Principal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
         IGConfiguracionServidorSMTP servidor = new IGConfiguracionServidorSMTP();
         servidor.setVisible(true);
         servidor.toFront();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
         IGListaDeCorreos lista = new IGListaDeCorreos();
         lista.setVisible(true);
         lista.toFront();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
         IGEnvioDeCorreo correo = new IGEnvioDeCorreo();
         correo.setVisible(true);
         correo.toFront();
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
         this.dispose();
+        System.exit(0);
     }//GEN-LAST:event_jButton4ActionPerformed
 
     /**
@@ -147,6 +153,8 @@ public class Principal extends javax.swing.JFrame {
                 new Principal().setVisible(true);
             }
         });
+
+        
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

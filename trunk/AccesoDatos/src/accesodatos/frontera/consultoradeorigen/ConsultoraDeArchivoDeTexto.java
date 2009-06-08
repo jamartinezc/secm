@@ -90,13 +90,14 @@ public class ConsultoraDeArchivoDeTexto implements ConsultoraDeOrigen,Serializab
      * @return null Si ya se ha leido algo o si no se puede leer, de lo contrario retorna la lista de los nombres de las columnas.
      */
     @Override
-    public String[] consultarColumnasDisponibles() {//TODO eliminar dependencia de este metodo
+    public String[] consultarColumnasDisponibles() {
 
         if(!leido){
             columnasDisponibles = comportamientoLeer.consultarColumnasDisponibles(archivo);
+            leido=true;
             return columnasDisponibles;
         }else{
-            return null;
+            return columnasDisponibles;
         }
     }
 
