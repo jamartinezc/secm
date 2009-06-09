@@ -55,8 +55,8 @@ public class IGConfiguracionServidorSMTP extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         EHost = new javax.swing.JTextField();
-        jCheckBox2 = new javax.swing.JCheckBox();
-        jSpinner1 = new javax.swing.JSpinner();
+        Essl = new javax.swing.JCheckBox();
+        EPuerto = new javax.swing.JSpinner();
         jCheckBox1 = new javax.swing.JCheckBox();
         jPanel3 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
@@ -127,11 +127,11 @@ public class IGConfiguracionServidorSMTP extends javax.swing.JFrame {
 
         EHost.setEnabled(false);
 
-        jCheckBox2.setText("Usar SSL");
-        jCheckBox2.setEnabled(false);
+        Essl.setText("Usar SSL");
+        Essl.setEnabled(false);
 
-        jSpinner1.setModel(new javax.swing.SpinnerNumberModel(1, 1, 65535, 1));
-        jSpinner1.setEnabled(false);
+        EPuerto.setModel(new javax.swing.SpinnerNumberModel(1, 1, 65535, 1));
+        EPuerto.setEnabled(false);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -154,10 +154,10 @@ public class IGConfiguracionServidorSMTP extends javax.swing.JFrame {
                         .addGap(66, 66, 66)))
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jSpinner1, javax.swing.GroupLayout.DEFAULT_SIZE, 107, Short.MAX_VALUE)
+                        .addComponent(EPuerto, javax.swing.GroupLayout.DEFAULT_SIZE, 107, Short.MAX_VALUE)
                         .addGap(18, 18, 18))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jCheckBox2)
+                        .addComponent(Essl)
                         .addGap(58, 58, 58)))
                 .addContainerGap())
         );
@@ -168,13 +168,13 @@ public class IGConfiguracionServidorSMTP extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(uPop)
                     .addComponent(uImap)
-                    .addComponent(jCheckBox2))
+                    .addComponent(Essl))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
                     .addComponent(EHost, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel9)
-                    .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(EPuerto, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -380,11 +380,18 @@ public class IGConfiguracionServidorSMTP extends javax.swing.JFrame {
         {
             uPop.setEnabled(false);
             uImap.setEnabled(false);
+            Essl.setEnabled(false);
+            EHost.setEnabled(false);
+            EPuerto.setEnabled(false);
+
         }
         else
         {
             uPop.setEnabled(true);
             uImap.setEnabled(true);
+            Essl.setEnabled(true);
+            EHost.setEnabled(true);
+            EPuerto.setEnabled(true);
         }
 
 
@@ -404,13 +411,14 @@ public class IGConfiguracionServidorSMTP extends javax.swing.JFrame {
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField EHost;
+    private javax.swing.JSpinner EPuerto;
+    private javax.swing.JCheckBox Essl;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton cancelar;
     private javax.swing.JPasswordField clave;
     private javax.swing.JButton guardar;
     private javax.swing.JButton jButton1;
     private javax.swing.JCheckBox jCheckBox1;
-    private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -425,7 +433,6 @@ public class IGConfiguracionServidorSMTP extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JSpinner jSpinner1;
     private javax.swing.JSpinner puerto;
     private javax.swing.JCheckBox ssl;
     private javax.swing.JTextField thost;
