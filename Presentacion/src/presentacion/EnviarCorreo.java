@@ -11,11 +11,13 @@
 
 package presentacion;
 
+import java.util.Calendar;
 import java.util.Iterator;
 import java.util.LinkedList;
 import javax.swing.JOptionPane;
 import negocio.control.AdministradoraListasDeCorreos;
 import negocio.control.ConfiguradoraServidorSMTP;
+import negocio.control.ProgramadoraDeEnvios;
 import negocio.control.ServiciosDeCorreo;
 import negocio.entidades.ListaDeCorreos;
 import negocio.entidades.ServidorSMTP;
@@ -78,9 +80,9 @@ public class EnviarCorreo extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         servidores = new javax.swing.JComboBox();
-        jRadioButton1 = new javax.swing.JRadioButton();
+        enviarAhora = new javax.swing.JRadioButton();
         jPanel1 = new javax.swing.JPanel();
-        jRadioButton2 = new javax.swing.JRadioButton();
+        enviarDespues = new javax.swing.JRadioButton();
         jLabel4 = new javax.swing.JLabel();
         dia = new javax.swing.JTextField();
         mes = new javax.swing.JTextField();
@@ -105,21 +107,21 @@ public class EnviarCorreo extends javax.swing.JFrame {
 
         jLabel3.setText("Listado de SMTP:");
 
-        buttonGroup1.add(jRadioButton1);
-        jRadioButton1.setText("Enviar Ahora");
-        jRadioButton1.addActionListener(new java.awt.event.ActionListener() {
+        buttonGroup1.add(enviarAhora);
+        enviarAhora.setText("Enviar Ahora");
+        enviarAhora.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton1ActionPerformed(evt);
+                enviarAhoraActionPerformed(evt);
             }
         });
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
 
-        buttonGroup1.add(jRadioButton2);
-        jRadioButton2.setText("Enviar Después");
-        jRadioButton2.addActionListener(new java.awt.event.ActionListener() {
+        buttonGroup1.add(enviarDespues);
+        enviarDespues.setText("Enviar Después");
+        enviarDespues.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton2ActionPerformed(evt);
+                enviarDespuesActionPerformed(evt);
             }
         });
 
@@ -180,13 +182,13 @@ public class EnviarCorreo extends javax.swing.JFrame {
                                 .addComponent(jLabel10))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jRadioButton2)))
+                        .addComponent(enviarDespues)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jRadioButton2)
+                .addComponent(enviarDespues)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
@@ -233,7 +235,7 @@ public class EnviarCorreo extends javax.swing.JFrame {
                                     .addGroup(layout.createSequentialGroup()
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                             .addComponent(jLabel3)
-                                            .addComponent(jRadioButton1)
+                                            .addComponent(enviarAhora)
                                             .addComponent(jLabel2))
                                         .addGap(18, 18, 18)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -265,7 +267,7 @@ public class EnviarCorreo extends javax.swing.JFrame {
                     .addComponent(jLabel3)
                     .addComponent(servidores, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(19, 19, 19)
-                .addComponent(jRadioButton1)
+                .addComponent(enviarAhora)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -278,16 +280,16 @@ public class EnviarCorreo extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton2ActionPerformed
+    private void enviarDespuesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_enviarDespuesActionPerformed
         
 
         dia.setEditable(true);
         mes.setEditable(true);
         año.setEditable(true);
         periodo.setEnabled(true);
-    }//GEN-LAST:event_jRadioButton2ActionPerformed
+}//GEN-LAST:event_enviarDespuesActionPerformed
 
-    private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton1ActionPerformed
+    private void enviarAhoraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_enviarAhoraActionPerformed
        
         dia.setEditable(false);
         mes.setEditable(false);
@@ -295,23 +297,38 @@ public class EnviarCorreo extends javax.swing.JFrame {
         periodo.setEnabled(false);
         int puerto = (Integer)(periodo.getValue());
         System.out.println("");
-    }//GEN-LAST:event_jRadioButton1ActionPerformed
+}//GEN-LAST:event_enviarAhoraActionPerformed
 
     private void cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelarActionPerformed
-        
         this.dispose();
     }//GEN-LAST:event_cancelarActionPerformed
 
     private void enviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_enviarActionPerformed
         ServidorSMTP servidor = ConfiguradoraServidorSMTP.getInstancia().buscar((String) servidores.getSelectedItem());
         ListaDeCorreos lista = AdministradoraListasDeCorreos.getInstancia().buscar((String) listas.getSelectedItem());
-        boolean resultado = ServiciosDeCorreo.enviarLista(lista, servidor);
+        boolean resultado = false;
+        if (enviarAhora.isSelected()) {
+            resultado = ServiciosDeCorreo.enviarLista(lista, servidor);
+        }
+
+        if (enviarDespues.isSelected()) {
+            Calendar c = Calendar.getInstance();
+            c.set(Integer.parseInt(año.getText()), Integer.parseInt(mes.getText())-1, Integer.parseInt(dia.getText()),0,0,0);
+            System.out.println(c.getTime());
+            if((Integer)periodo.getValue() == 0){
+                resultado = ProgramadoraDeEnvios.getInstancia().programarEnvio(lista, servidor, c.getTime());
+            }else{
+                resultado = ProgramadoraDeEnvios.getInstancia().programarEnvio(lista, servidor, c.getTime(),(Integer)periodo.getValue()*24*60*60*1000);
+            }
+        }
+
         if( ! resultado ){
             JOptionPane.showMessageDialog(this,
                     "No fue posible enviar el correo, por favor, intente mas tarde.",
                     "Error Enviar el correo",
                     JOptionPane.ERROR_MESSAGE);
         }
+        parent.actualizarTabla();
         this.dispose();
     }//GEN-LAST:event_enviarActionPerformed
 
@@ -344,6 +361,8 @@ public class EnviarCorreo extends javax.swing.JFrame {
     private javax.swing.JButton cancelar;
     private javax.swing.JTextField dia;
     private javax.swing.JButton enviar;
+    private javax.swing.JRadioButton enviarAhora;
+    private javax.swing.JRadioButton enviarDespues;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
@@ -355,8 +374,6 @@ public class EnviarCorreo extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JComboBox listas;
     private javax.swing.JTextField mes;
     private javax.swing.JSpinner periodo;

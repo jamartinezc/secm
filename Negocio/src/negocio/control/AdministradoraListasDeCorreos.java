@@ -79,10 +79,10 @@ public class AdministradoraListasDeCorreos {
          File archivo = new File( nombreDeArchivo );
          if( archivo.length() > 0){
              in = new ObjectInputStream(new FileInputStream(nombreDeArchivo));
-                setListas((LinkedList<ListaDeCorreos>) in.readObject());
+             setListas((LinkedList<ListaDeCorreos>) in.readObject());
              in.close();
          }else{
-                setListas(new LinkedList<ListaDeCorreos>());
+             setListas(new LinkedList<ListaDeCorreos>());
          }
        }
        catch(IOException ex)
@@ -188,7 +188,7 @@ public class AdministradoraListasDeCorreos {
     }
 
     public void ingresarServidorDeEliminacion(Properties datos, int tipo, String fraseDeEliminacion, ListaDeCorreos lista){
-
+        System.out.println("ingresarServidorDeEliminacion"+datos);
         ConectoraACorreo conectora = ConectoraFactory.create(tipo, datos);
         ListaNoReceptores noReceptores = lista.getNoReceptores();
         noReceptores.setServidorDeEntrada(conectora, fraseDeEliminacion);

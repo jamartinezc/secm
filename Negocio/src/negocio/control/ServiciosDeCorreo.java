@@ -121,7 +121,7 @@ public class ServiciosDeCorreo {
         datos.setProperty("usarSSL", usarSSL);
         datos.setProperty("usuario", usuario);
         datos.setProperty("contrasena", String.valueOf(contrasena));
-
+         System.out.println("ingresarServidorDeEliminacion"+usarSSL);
         AdministradoraListasDeCorreos.getInstancia().ingresarServidorDeEliminacion(datos, tipo, fraseDeEliminacion, lista);
      }
 

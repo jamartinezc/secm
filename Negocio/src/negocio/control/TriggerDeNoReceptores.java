@@ -5,8 +5,6 @@ import accesodatos.frontera.DriverCorreo;
 import accesodatos.frontera.conectoraacorreo.ConectoraACorreo;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.mail.MessagingException;
 import negocio.entidades.ListaDeCorreos;
 
@@ -20,7 +18,7 @@ public class TriggerDeNoReceptores implements Runnable{
 
     @Override
     public void run() {
-        ejecutar=false;
+        ejecutar=true;
         while(ejecutar){
             AdministradoraListasDeCorreos.getInstancia().abrir();
             LinkedList<ListaDeCorreos> listas = AdministradoraListasDeCorreos.getInstancia().getListas();
@@ -31,12 +29,14 @@ public class TriggerDeNoReceptores implements Runnable{
                 ConectoraACorreo servidor = lista.getNoReceptores().getServidorDeEntrada();
                 if (servidor != null) {
                     try {
-
+                        System.out.println("Verificando no receptores para: "+lista.getNombre());
                         String[] correosAEliminar = DriverCorreo.getInstancia().verificarSiExisteCorreoPorAsunto(servidor, lista.getNoReceptores().getFraseDeEliminacion());
                         //guardar la lista modificada
                         AdministradoraListasDeCorreos.getInstancia().eliminarRegistrosdeLista(lista, correosAEliminar);
 
                     } catch (MessagingException ex) {
+                        System.out.println("No se pudo verificar el correo: " + servidor);
+                    }catch(SecurityException ex){
                         System.out.println("No se pudo verificar el correo: " + servidor);
                     }
                 }else{System.out.println(lista.getNombre()+" no tiene servidor");}

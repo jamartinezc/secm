@@ -60,7 +60,7 @@ public class LectoraDeCVS implements LectoraDeArchivoDeTexto, Serializable{
             while ((lineaDatos = archivo.readLine()) != null) {
                 String[] registroListaDatos;
                 String[] registro = lineaDatos.split(delimitador);
-                registroListaDatos = new String[registro.length];
+                registroListaDatos = new String[columnas.length];
                 Arrays.fill(registroListaDatos, "");
                 for (int i = 0; i < columnas.length; i++) {
                     int col = columnas[i];

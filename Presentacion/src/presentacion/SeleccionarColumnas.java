@@ -10,6 +10,8 @@
 
 package presentacion;
 
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Jaguar
@@ -134,7 +136,14 @@ public class SeleccionarColumnas extends javax.swing.JDialog {
         if( seleccionandoRemitente ){
             parent.setPara((String) columna.getSelectedItem(),"#"+etiqueta.getText()+"#");
         }else{
-            parent.añadirColumna((String) columna.getSelectedItem(),"#"+etiqueta.getText()+"#");
+            if(etiqueta.getText().equals("")){
+                JOptionPane.showMessageDialog(this,
+                        "Debe ingresar primero una etiqueta en el campo, \"Nombre en el mensaje\"",
+                        "Error",
+                        JOptionPane.WARNING_MESSAGE);
+            }else{
+                parent.añadirColumna((String) columna.getSelectedItem(),"#"+etiqueta.getText()+"#");
+            }
         }
         this.dispose();
 }//GEN-LAST:event_aceptarActionPerformed
@@ -146,24 +155,8 @@ public class SeleccionarColumnas extends javax.swing.JDialog {
     public void setSeleccionandoRemitente(Boolean estado){
         seleccionandoRemitente = estado;
         jLabel3.setVisible(!estado);
+        jLabel4.setVisible(!estado);
         etiqueta.setVisible(!estado);
-    }
-
-    /**
-    * @param args the command line arguments
-    */
-    public static void main(String args[]) {
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                SeleccionarColumnas dialog = new SeleccionarColumnas(new GuardarCorreo(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
     }
 
     private GuardarCorreo parent;

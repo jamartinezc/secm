@@ -130,7 +130,7 @@ public class IGEnvioDeCorreo extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void enviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_enviarActionPerformed
-        EnviarCorreo dialogo = new EnviarCorreo();
+        EnviarCorreo dialogo = new EnviarCorreo(this);
         dialogo.setVisible(true);
 }//GEN-LAST:event_enviarActionPerformed
 
@@ -203,7 +203,7 @@ public class IGEnvioDeCorreo extends javax.swing.JFrame {
                     return df.format(listaCorreos.get(rowIndex).getFechaEnvio());
                 }
                 case 2:{
-                    return (listaCorreos.get(rowIndex).getDiasEntreEnvios()*1000*60*60*24);
+                    return (listaCorreos.get(rowIndex).getDiasEntreEnvios()/1000/60/60/24);
                 }
                 default:{
                     return "--";
@@ -215,6 +215,11 @@ public class IGEnvioDeCorreo extends javax.swing.JFrame {
     protected void enviarCorreo(ServidorSMTP servidor){
 //        ServiciosDeCorreo.enviarLista(listaCorreos.get(WIDTH), servidor);
         
+    }
+
+    protected void actualizarTabla(){
+        listaCorreos = negocio.control.ServiciosDeCorreo.consultarCorreosCalendarizados();
+        tablaCorreo.setModel(new ModeloTabla());
     }
 
     /**

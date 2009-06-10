@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.mail.MessagingException;
+import javax.mail.SendFailedException;
 import negocio.entidades.Correo;
 import negocio.entidades.ListaDeCorreos;
 import negocio.entidades.ServidorSMTP;
@@ -88,28 +89,34 @@ public class EnviadoraDeCorreos {
                 }
             }
             correo.setDestinatariosBCC(nuevoBCC.toArray(new String[0]));
-            try {
-//                driver.enviarCorreo(correo, lista.getServidorSMTP());
-                driver.enviarCorreo(lista.getServidorSMTP().getHost(),
-                        lista.getServidorSMTP().getPuerto(),
-                        lista.getServidorSMTP().getSSL_FACTORY(),
-                        lista.getServidorSMTP().getCorreoRemitente(),
-                        lista.getServidorSMTP().getContrasena(),
-                        correo.getDestinatariosTO(),
-                        correo.getDestinatariosCC(),
-                        correo.getDestinatariosBCC(),
-                        correo.getAsunto(),
-                        correo.getMensaje(),
-                        correo.getAdjuntos());
-            } catch (MessagingException ex) {
-                //TODO registrar errores en el log
-                //ex.printStackTrace();
-                Logger.getLogger(EnviadoraDeCorreos.class.getName()).log(Level.SEVERE, null, ex);
-                errores = true;
-            }finally{
-                correo.setDestinatariosTO(TO);
-                correo.setDestinatariosCC(CC);
-                correo.setDestinatariosBCC(BCC);
+            if(correo.getDestinatariosTO().length!=0 || correo.getDestinatariosCC().length!=0 || correo.getDestinatariosBCC().length!=0){
+                try {
+    //                driver.enviarCorreo(correo, lista.getServidorSMTP());
+                    driver.enviarCorreo(lista.getServidorSMTP().getHost(),
+                            lista.getServidorSMTP().getPuerto(),
+                            lista.getServidorSMTP().getSSL_FACTORY(),
+                            lista.getServidorSMTP().getCorreoRemitente(),
+                            lista.getServidorSMTP().getContrasena(),
+                            correo.getDestinatariosTO(),
+                            correo.getDestinatariosCC(),
+                            correo.getDestinatariosBCC(),
+                            correo.getAsunto(),
+                            correo.getMensaje(),
+                            correo.getAdjuntos());
+                } catch (MessagingException ex) {
+                    //TODO registrar errores en el log
+                    //ex.printStackTrace();
+                    Logger.getLogger(EnviadoraDeCorreos.class.getName()).log(Level.SEVERE, null, ex);
+                    errores = true;
+                }catch(SecurityException ex){
+                        System.out.println("No se pudo enviar un mensaje por el momento");
+                        Logger.getLogger(EnviadoraDeCorreos.class.getName()).log(Level.SEVERE, null, ex);
+                        errores = true;
+                }finally{
+                    correo.setDestinatariosTO(TO);
+                    correo.setDestinatariosCC(CC);
+                    correo.setDestinatariosBCC(BCC);
+                }
             }
         }
         return !errores;

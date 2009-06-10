@@ -3,6 +3,7 @@ package accesodatos.frontera.consultoradeorigen;
 
 import accesodatos.frontera.DriverBD;
 import java.io.Serializable;
+import java.lang.String;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.LinkedList;
@@ -102,25 +103,33 @@ public class ConsultoraDeBD implements ConsultoraDeOrigen , Serializable{
         String consultaSQLtablas = " FROM ";
         String consultaSQL="";
         String nombreTabla="";
+        String where="";
+        LinkedList<String> tablasAgregadas=new LinkedList<String>();
         int nCol = columnas.length-1;
         if(nCol >= 1){
 
-            for(int i = 0; i < nCol; i++){
-                consultaSQLcolumnas+=columnas[i]+",";
-                System.out.println(columnas[i]);
-                String nuevoNombreTabla = columnas[i].split("\\.")[0];
-                if( ! nuevoNombreTabla.equalsIgnoreCase(nombreTabla) ){
-                    nombreTabla = nuevoNombreTabla;
-                    consultaSQLtablas+=nombreTabla+",";
+            for(int i = 0; i <= nCol; i++){
+                if ( ! columnas[i].contains("WHERE ") ) {
+                    consultaSQLcolumnas += columnas[i] + ",";
+                    System.out.println(columnas[i]);
+                    String nuevoNombreTabla = columnas[i].split("\\.")[0];
+//                if( ! nuevoNombreTabla.equalsIgnoreCase(nombreTabla) ){
+                    if (!tablasAgregadas.contains(nuevoNombreTabla)) {
+                        nombreTabla = nuevoNombreTabla;
+                        tablasAgregadas.add(nombreTabla);
+                        consultaSQLtablas += nombreTabla + ",";
+                    }
+                } else {
+                    where=columnas[i];
                 }
             }
             //eliminar la ultima "," de consultaSQLtablas y consultaSQLcolumnas
             consultaSQLtablas = consultaSQLtablas.substring(0, consultaSQLtablas.length()-1);
             consultaSQLcolumnas = consultaSQLcolumnas.substring(0, consultaSQLcolumnas.length()-1);
-            if( columnas[ columnas.length-1 ].equals("")){
-                consultaSQL=consultaSQLcolumnas+consultaSQLtablas;
-            }else{
-                consultaSQL=consultaSQLcolumnas+consultaSQLtablas+" WHERE "+columnas[ columnas.length-1 ];
+            /*if( columnas[ columnas.length-1 ].equals("")){
+            consultaSQL=consultaSQLcolumnas+consultaSQLtablas;
+            }else*/{
+                consultaSQL=consultaSQLcolumnas+consultaSQLtablas+" "+where;
             }
 
         }else if(nCol == 0){

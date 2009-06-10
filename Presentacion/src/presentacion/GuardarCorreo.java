@@ -1,24 +1,18 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+
  */
 
 /*
- * GuardarCorreo.java
+ * GuardarCorreo2.java
  *
- * Created on 7/06/2009, 05:18:41 PM
+ * Created on 8/06/2009, 06:22:42 PM
  */
 
 package presentacion;
 
-import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.net.URL;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -27,20 +21,20 @@ import javax.swing.text.html.HTMLEditorKit;
 
 /**
  *
- * @author Administrador
+ * @author Jaguar
  */
-public class GuardarCorreo extends javax.swing.JFrame {
+public class GuardarCorreo extends javax.swing.JDialog {
 
-    /** Creates new form GuardarCorreo */
-    public GuardarCorreo() {
+    /** Creates new form GuardarCorreo2 */
+    public GuardarCorreo(IGListaDeCorreos parent, boolean modal, boolean isBD) {
+        super(parent, modal);
+        parent2 = parent;
         columnasAñadidas = new Properties();
         initComponents();
-    }
-
-    public GuardarCorreo(IGListaDeCorreos parent) {
-        this.parent2 = parent;
-        columnasAñadidas = new Properties();
-        initComponents();
+        if(!isBD){
+            ingresarWhere.setEnabled(false);
+        }
+        where="";
     }
 
     /** This method is called from within the constructor to
@@ -52,7 +46,6 @@ public class GuardarCorreo extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jTextField1 = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         asunto = new javax.swing.JTextField();
@@ -76,13 +69,12 @@ public class GuardarCorreo extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         para = new javax.swing.JTextField();
         ingresar = new javax.swing.JButton();
+        ingresarWhere = new javax.swing.JButton();
 
-        jTextField1.setText("jTextField1");
-
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(690, 500));
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 3, 18)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Tahoma", 3, 18));
         jLabel1.setText("Mensaje a enviar");
 
         jLabel2.setText("Asunto:");
@@ -169,19 +161,26 @@ public class GuardarCorreo extends javax.swing.JFrame {
             }
         });
 
+        ingresarWhere.setText("Ingresar Condición");
+        ingresarWhere.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ingresarWhereActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(176, 176, 176)
+                        .addGap(166, 166, 166)
                         .addComponent(jLabel1))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addContainerGap()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel3)
                                     .addComponent(jLabel4)
@@ -201,7 +200,7 @@ public class GuardarCorreo extends javax.swing.JFrame {
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(ingresar))))
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(70, 70, 70)
+                                .addGap(60, 60, 60)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                         .addComponent(cargar)
@@ -211,12 +210,13 @@ public class GuardarCorreo extends javax.swing.JFrame {
                                         .addComponent(cancelar))
                                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 391, Short.MAX_VALUE))))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(eliminar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(insertar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(añadir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(ingresarWhere, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(eliminar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(insertar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(añadir, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -265,12 +265,38 @@ public class GuardarCorreo extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(insertar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(eliminar)))
+                        .addComponent(eliminar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(ingresarWhere)))
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void cargarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cargarActionPerformed
+        JFileChooser chooser = new JFileChooser();
+        chooser.setDialogTitle("Mensaje de los correos a enviar");
+        int returnVal = chooser.showOpenDialog(this);
+        if(returnVal == JFileChooser.APPROVE_OPTION) {
+            try {
+                //                mensaje.setPage(chooser.getSelectedFile().getAbsolutePath());
+                mensaje.setPage(chooser.getSelectedFile().toURI().toURL());
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(this,
+                        "No se pudo cargar el mensaje, por favor verifique que\n" +
+                        "el achivo no está siendo usado por otro programa.",
+                        "Error de lectura",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        }
+}//GEN-LAST:event_cargarActionPerformed
+
+    private void añadirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_añadirActionPerformed
+        SeleccionarColumnas dialog = new SeleccionarColumnas(this, true);
+        dialog.setSeleccionandoRemitente(false);
+        dialog.setVisible(true);
+}//GEN-LAST:event_añadirActionPerformed
 
     private void insertarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertarActionPerformed
         int cursor = mensaje.getCaretPosition();
@@ -295,20 +321,10 @@ public class GuardarCorreo extends javax.swing.JFrame {
         archivosModel.removeElement( seleccionado );
 }//GEN-LAST:event_quitarActionPerformed
 
-    private void añadirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_añadirActionPerformed
-        SeleccionarColumnas dialog = new SeleccionarColumnas(this, true);
-        dialog.setSeleccionandoRemitente(false);
-        dialog.setVisible(true);
-    }//GEN-LAST:event_añadirActionPerformed
-
     private void eliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eliminarActionPerformed
         Object seleccionado = columnas.getSelectedValue();
         columnasModel.removeElement(seleccionado);
 }//GEN-LAST:event_eliminarActionPerformed
-
-    private void cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelarActionPerformed
-        this.dispose();
-}//GEN-LAST:event_cancelarActionPerformed
 
     private void aceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aceptarActionPerformed
         int cantidadDeAdjuntos = adjuntos.getModel().getSize();
@@ -317,15 +333,15 @@ public class GuardarCorreo extends javax.swing.JFrame {
         for (int i = 0; i < archivos.length; i++) {
             archivos[i]=(String) adjuntos.getModel().getElementAt(i);
         }
-        
-//        parent2.guardarLista(columnasAñadidas, asunto.getText(), mensaje.getText(), archivos);
+
+        //        parent2.guardarLista(columnasAñadidas, asunto.getText(), mensaje.getText(), archivos);
         HTMLEditorKit editor = new HTMLEditorKit();
         String mensajeEnHTML = new String();
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         try {
             editor.write(os, mensaje.getDocument(), 0, mensaje.getDocument().getLength());
             mensajeEnHTML = os.toString();
-//            System.out.println("HTML:\n\n"+mensajeEnHTML);
+            //            System.out.println("HTML:\n\n"+mensajeEnHTML);
             parent2.guardarLista(columnasAñadidas, asunto.getText(), mensajeEnHTML, archivos);
         } catch (IOException ex) {
             //nunca se lanzará
@@ -334,31 +350,22 @@ public class GuardarCorreo extends javax.swing.JFrame {
         }
 
         this.dispose();
-    }//GEN-LAST:event_aceptarActionPerformed
+}//GEN-LAST:event_aceptarActionPerformed
 
-    private void cargarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cargarActionPerformed
-        JFileChooser chooser = new JFileChooser();
-        chooser.setDialogTitle("Mensaje de los correos a enviar");
-        int returnVal = chooser.showOpenDialog(this);
-        if(returnVal == JFileChooser.APPROVE_OPTION) {
-            try {
-//                mensaje.setPage(chooser.getSelectedFile().getAbsolutePath());
-                mensaje.setPage(chooser.getSelectedFile().toURI().toURL());
-            } catch (IOException ex) {
-                JOptionPane.showMessageDialog(this,
-                        "No se pudo cargar el mensaje, por favor verifique que\n" +
-                        "el achivo no está siendo usado por otro programa.",
-                        "Error de lectura",
-                        JOptionPane.ERROR_MESSAGE);
-            }
-        }
-    }//GEN-LAST:event_cargarActionPerformed
+    private void cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelarActionPerformed
+        this.dispose();
+}//GEN-LAST:event_cancelarActionPerformed
 
     private void ingresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ingresarActionPerformed
         SeleccionarColumnas dialog = new SeleccionarColumnas(this, true);
         dialog.setSeleccionandoRemitente(true);
         dialog.setVisible(true);
 }//GEN-LAST:event_ingresarActionPerformed
+
+    private void ingresarWhereActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ingresarWhereActionPerformed
+        IngresarWhere dialog = new IngresarWhere(this, true,where);
+        dialog.setVisible(true);
+}//GEN-LAST:event_ingresarWhereActionPerformed
 
     protected void añadirColumna(String id, String etiqueta){
         columnasAñadidas.setProperty(etiqueta, id);
@@ -371,15 +378,10 @@ public class GuardarCorreo extends javax.swing.JFrame {
         para.setText(id);
     }
 
-    /**
-    * @param args the command line arguments
-    */
-    public static void main(String args[]) {
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new GuardarCorreo().setVisible(true);
-            }
-        });
+    protected void setWhere(String cond){
+        String etiqueta="#WHERE#";
+        columnasAñadidas.setProperty(etiqueta, cond);
+        where = cond;
     }
 
     public IGListaDeCorreos getParent2() {
@@ -389,6 +391,8 @@ public class GuardarCorreo extends javax.swing.JFrame {
     //Variables de clase
     private IGListaDeCorreos parent2;
     private Properties columnasAñadidas;
+    private boolean configurarBD;
+    private String where;
 
     private DefaultListModel archivosModel = new DefaultListModel();
     private DefaultListModel columnasModel = new DefaultListModel();
@@ -403,6 +407,7 @@ public class GuardarCorreo extends javax.swing.JFrame {
     private javax.swing.JButton eliminar;
     private javax.swing.JButton examinar;
     private javax.swing.JButton ingresar;
+    private javax.swing.JButton ingresarWhere;
     private javax.swing.JButton insertar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -413,7 +418,6 @@ public class GuardarCorreo extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JEditorPane mensaje;
     private javax.swing.JTextField para;
     private javax.swing.JButton quitar;
