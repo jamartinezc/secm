@@ -24,6 +24,7 @@ public class ConectoraFactory {
                 ConectoraAPOP3 servidorDeEntrada = new ConectoraAPOP3();
                 servidorDeEntrada.setHost(datos.getProperty("host"));
                 servidorDeEntrada.setPuerto(Integer.parseInt(datos.getProperty("puerto")));
+                System.out.println("ConectoraFactory.create"+Boolean.parseBoolean(datos.getProperty("usarSSL")));
                 servidorDeEntrada.setUsarSSL(Boolean.parseBoolean(datos.getProperty("usarSSL")));
                 servidorDeEntrada.setUsuario(datos.getProperty("usuario"));
                 servidorDeEntrada.setContrasena(datos.getProperty("contrasena"));

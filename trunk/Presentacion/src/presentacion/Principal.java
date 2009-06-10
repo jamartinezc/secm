@@ -11,12 +11,16 @@
 
 package presentacion;
 
+import java.awt.SystemTray;
+import negocio.control.AdministradoraListaNoreceptores;
+import negocio.control.ProgramadoraDeEnvios;
+
 /**
  *
  * @author Administrador
  */
 public class Principal extends javax.swing.JFrame {
-
+    
     /** Creates new form Principal */
     public Principal() {
         try
@@ -27,6 +31,8 @@ public class Principal extends javax.swing.JFrame {
         {
             //Dejar el look and feel de java
         }
+        AdministradoraListaNoreceptores.getInstancia();
+        ProgramadoraDeEnvios.getInstancia();
         initComponents();
     }
 
@@ -41,10 +47,10 @@ public class Principal extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        servidoresEnvio = new javax.swing.JButton();
+        listas = new javax.swing.JButton();
+        enviarCorreo = new javax.swing.JButton();
+        salir = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("SECM");
@@ -54,31 +60,31 @@ public class Principal extends javax.swing.JFrame {
 
         jLabel2.setText("Sistema de Envío de Correos Masivos");
 
-        jButton1.setText("Configurar Servidores de Envío");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        servidoresEnvio.setText("Configurar Servidores de Envío");
+        servidoresEnvio.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                servidoresEnvioActionPerformed(evt);
             }
         });
 
-        jButton2.setText("Configurar Listas de Correo");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        listas.setText("Configurar Listas de Correo");
+        listas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                listasActionPerformed(evt);
             }
         });
 
-        jButton3.setText("Programar/Enviar Correo");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        enviarCorreo.setText("Programar/Enviar Correo");
+        enviarCorreo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                enviarCorreoActionPerformed(evt);
             }
         });
 
-        jButton4.setText("Salir");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        salir.setText("Salir");
+        salir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                salirActionPerformed(evt);
             }
         });
 
@@ -93,11 +99,11 @@ public class Principal extends javax.swing.JFrame {
                         .addGap(50, 50, 50)
                         .addComponent(jLabel1))
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(servidoresEnvio, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel2)
-                        .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton4, javax.swing.GroupLayout.Alignment.TRAILING)))
+                        .addComponent(listas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(enviarCorreo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(salir, javax.swing.GroupLayout.Alignment.TRAILING)))
                 .addContainerGap(30, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -108,41 +114,71 @@ public class Principal extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2)
                 .addGap(33, 33, 33)
-                .addComponent(jButton1)
+                .addComponent(servidoresEnvio)
                 .addGap(18, 18, 18)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(listas, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton3)
+                .addComponent(enviarCorreo)
                 .addGap(31, 31, 31)
-                .addComponent(jButton4)
+                .addComponent(salir)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        IGConfiguracionServidorSMTP servidor = new IGConfiguracionServidorSMTP();
-        servidor.setVisible(true);
-        servidor.toFront();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void servidoresEnvioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_servidoresEnvioActionPerformed
+        if (servidor != null) {
+            if (!servidor.isDisplayable()) {
+                servidor = new IGConfiguracionServidorSMTP();
+                servidor.setVisible(true);
+                servidor.toFront();
+            } else {
+                servidor.toFront();
+            }
+        }else{
+            servidor = new IGConfiguracionServidorSMTP();
+            servidor.setVisible(true);
+            servidor.toFront();
+        }
+}//GEN-LAST:event_servidoresEnvioActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        IGListaDeCorreos lista = new IGListaDeCorreos();
-        lista.setVisible(true);
-        lista.toFront();
-    }//GEN-LAST:event_jButton2ActionPerformed
+    private void listasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listasActionPerformed
+        if (lista!=null) {
+            if (!lista.isDisplayable()) {
+                lista = new IGListaDeCorreos();
+                lista.setVisible(true);
+                lista.toFront();
+            } else {
+                lista.toFront();
+            }
+        } else {
+            lista = new IGListaDeCorreos();
+            lista.setVisible(true);
+            lista.toFront();
+        }
+}//GEN-LAST:event_listasActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        IGEnvioDeCorreo correo = new IGEnvioDeCorreo();
-        correo.setVisible(true);
-        correo.toFront();
-    }//GEN-LAST:event_jButton3ActionPerformed
+    private void enviarCorreoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_enviarCorreoActionPerformed
+        if (correo!=null) {
+            if (!correo.isDisplayable()) {
+                correo = new IGEnvioDeCorreo();
+                correo.setVisible(true);
+                correo.toFront();
+            } else {
+                correo.toFront();
+            }
+        } else {
+            correo = new IGEnvioDeCorreo();
+            correo.setVisible(true);
+            correo.toFront();
+        }
+}//GEN-LAST:event_enviarCorreoActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    private void salirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_salirActionPerformed
         this.dispose();
         System.exit(0);
-    }//GEN-LAST:event_jButton4ActionPerformed
+}//GEN-LAST:event_salirActionPerformed
 
     /**
     * @param args the command line arguments
@@ -153,17 +189,20 @@ public class Principal extends javax.swing.JFrame {
                 new Principal().setVisible(true);
             }
         });
-
-        
     }
 
+    //Variables de la clase
+    private IGConfiguracionServidorSMTP servidor;
+    private IGEnvioDeCorreo correo;
+    private IGListaDeCorreos lista;
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
+    private javax.swing.JButton enviarCorreo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JButton listas;
+    private javax.swing.JButton salir;
+    private javax.swing.JButton servidoresEnvio;
     // End of variables declaration//GEN-END:variables
 
 }

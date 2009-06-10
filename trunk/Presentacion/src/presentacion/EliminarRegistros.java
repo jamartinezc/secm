@@ -43,10 +43,10 @@ public class EliminarRegistros extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14));
         jLabel1.setText("Correos Programados");
 
-        jLabel2.setText("por favor ingrese la lista de correos a retirar, separados por coma.");
+        jLabel2.setText("Porfavor ingrese la lista de correos a retirar, separados por coma.");
 
         correos.setColumns(20);
         correos.setRows(5);
@@ -60,6 +60,11 @@ public class EliminarRegistros extends javax.swing.JDialog {
         });
 
         cancelar.setText("Cancelar");
+        cancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancelarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -114,7 +119,12 @@ public class EliminarRegistros extends javax.swing.JDialog {
              String[] listaCorreos = correos.getText().split("[,;]");
              parent.eliminarRegistros(listaCorreos);
         }
+        this.dispose();
 }//GEN-LAST:event_aceptarActionPerformed
+
+    private void cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelarActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_cancelarActionPerformed
 
     /**
     * @param args the command line arguments

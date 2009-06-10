@@ -108,26 +108,25 @@ public class NuevaLista extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void aceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aceptarActionPerformed
-
-        if (jComboBox1.getSelectedIndex()==0)
-        {
-            ConfiguracionArchivo x = new ConfiguracionArchivo(parent);
-            x.setVisible(true);
-            x.toFront();
-        }
-        else
-        {
-            ConfiguracionBD y = new ConfiguracionBD();
-            y.setVisible(true);
-            y.toFront();
-        }
-        parent.toBack();
+        
         parent.setNombreNuevaLista(nombreLista.getText());
+        if (jComboBox1.getSelectedIndex()==0){
+            ConfiguracionArchivo x = new ConfiguracionArchivo(parent,true);
+            x.setVisible(true);
+//            this.toBack();
+//            parent.toBack();
+//            x.toFront();
+        }else{
+            ConfiguracionBD y = new ConfiguracionBD(parent,true);
+            y.setVisible(true);
+//            this.toBack();
+//            parent.toBack();
+//            y.toFront();
+        }
         this.dispose();
 }//GEN-LAST:event_aceptarActionPerformed
 
     private void cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelarActionPerformed
-        // TODO add your handling code here:
         this.dispose();
 }//GEN-LAST:event_cancelarActionPerformed
     

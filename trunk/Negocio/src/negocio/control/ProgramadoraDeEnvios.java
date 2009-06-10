@@ -134,7 +134,7 @@ public class ProgramadoraDeEnvios {
     }
 
     protected void enviarCorreo(CorreoCalendarizado correoAEnviar) {
-
+        System.out.println("Enviando:"+correoAEnviar.getNombreDeLista());
         AdministradoraListasDeCorreos.getInstancia().abrir();
         ListaDeCorreos listaAEnviar = AdministradoraListasDeCorreos.getInstancia().buscar(correoAEnviar.getNombreDeLista());
         if(listaAEnviar != null){

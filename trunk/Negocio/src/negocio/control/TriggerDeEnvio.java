@@ -17,9 +17,10 @@ public class TriggerDeEnvio implements Runnable {
 
     @Override
     public void run() {
-        ejecutar=false;
+        ejecutar=true;
         long dormir;
         while(ejecutar){
+            System.out.println("HOLA");
             CorreoCalendarizado siguiente = ProgramadoraDeEnvios.getInstancia().getSiguienteEnvio();
             Calendar fechaActual = Calendar.getInstance();
             if(siguiente != null){

@@ -80,7 +80,9 @@ public class DriverCorreo {
 
         auth.setContrasena(contrasenia);
         
-        Session sesion = Session.getDefaultInstance(paramatrosCorreo, auth);
+//        Session sesion = Session.getDefaultInstance(paramatrosCorreo, auth);
+//        Session sesion = Session.getDefaultInstance(paramatrosCorreo);
+        Session sesion = Session.getInstance(paramatrosCorreo);
 
         //inicializar el mensaje
         Message mensaje = new MimeMessage(sesion);
@@ -140,8 +142,13 @@ public class DriverCorreo {
         mensaje.setContent(multiPart);
         System.out.println("Pasa por: "+nombreServidorSMTP);
         //enviar el mensaje
-        Transport.send(mensaje);
+//        Transport.send(mensaje);
+        Transport transport = sesion.getTransport("smtp");
+        transport.connect(correoRemitente,String.copyValueOf(contrasenia));
+        transport.sendMessage(mensaje,mensaje.getAllRecipients());
         System.out.println("Enviando correo...");
+        transport.close();
+        
     }
 
     /**
@@ -186,46 +193,46 @@ public class DriverCorreo {
     public static void main(String[] args) throws MessagingException {
 //        ServidorSMTP serv=new  ServidorSMTP();
 //        Correo correo  = new Correo();
-//        DriverCorreo dc = getInstancia();
-//
-//        char[] contrasenia = ("AngelaJorgeElias".toCharArray());
-//        String correoRemitente = ("secm.prueba@gmail.com");
-//        String nombreServidorSMTP = ("smtp.gmail.com");
-//        int puertoSMTP = (465);
-//
-//        String[] TO = new String[1];
-//        TO[0]="jaguar.scratch@gmail.com";
-//        String[] CC = new String[0];
-//        String asunto = ("secm: prueba envío de correo");
-//        String textoMensaje = ("Esta es una prueba de envío de correo <br>" +
-//                          "<h1>con varios adjuntos</h1>(@)");
-//
-//        File[] adjuntos = new File[3];
-//        adjuntos[0]=new File("prueba.properties");
-//        adjuntos[1]=new File("prueba2.properties");
-//        adjuntos[2]=new File("jack-the-black-cat-9439.jpg");
-//
-//        try {
-//            dc.enviarCorreo(nombreServidorSMTP, puertoSMTP, "javax.net.ssl.SSLSocketFactory", correoRemitente, contrasenia, TO, CC, CC, asunto, textoMensaje, adjuntos);
-//        } catch (AddressException ex) {
-//            System.out.println("no existe la direccion");
-//            Logger.getLogger(DriverCorreo.class.getName()).log(Level.SEVERE, null, ex);
-//        } catch (MessagingException ex) {
-//            System.out.println("error desconocido: ");
-//            ex.printStackTrace();
-//            Logger.getLogger(DriverCorreo.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-        ConectoraACorreo conectora = new ConectoraAIMAP();
-        conectora.setHost("imap.gmail.com");
-        conectora.setPuerto(993);//993.5
-        conectora.setUsuario("secm.prueba@gmail.com");
-        conectora.setContrasena("AngelaJorgeElias");
-        conectora.setUsarSSL(true);
-        String[] res = DriverCorreo.getInstancia().verificarSiExisteCorreoPorAsunto(conectora, "ELIMINAR");
+        DriverCorreo dc = getInstancia();
 
-        for (int i = 0; i < res.length; i++) {
-            String string = res[i];
-            System.out.println(string);
+        char[] contrasenia = ("AngelaJorgeElias".toCharArray());
+        String correoRemitente = ("secm3.prueba@gmail.com");
+        String nombreServidorSMTP = ("smtp.gmail.com");
+        int puertoSMTP = (465);
+
+        String[] TO = new String[1];
+        TO[0]="jaguar.scratch@gmail.com";
+        String[] CC = new String[0];
+        String asunto = ("secm mail Driver: prueba envío de correo");
+        String textoMensaje = ("Esta es una prueba de envío de correo desde la nueva versión del driver de correo<br>" +
+                          "<h1>con varios adjuntos</h1>(@)");
+
+        File[] adjuntos = new File[3];
+        adjuntos[0]=new File("prueba.properties");
+        adjuntos[1]=new File("prueba2.properties");
+        adjuntos[2]=new File("jack-the-black-cat-9439.jpg");
+
+        try {
+            dc.enviarCorreo(nombreServidorSMTP, puertoSMTP, "javax.net.ssl.SSLSocketFactory", correoRemitente, contrasenia, TO, CC, CC, asunto, textoMensaje, adjuntos);
+        } catch (AddressException ex) {
+            System.out.println("no existe la direccion");
+            Logger.getLogger(DriverCorreo.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (MessagingException ex) {
+            System.out.println("error desconocido: ");
+            ex.printStackTrace();
+            Logger.getLogger(DriverCorreo.class.getName()).log(Level.SEVERE, null, ex);
         }
+//        ConectoraACorreo conectora = new ConectoraAIMAP();
+//        conectora.setHost("imap.gmail.com");
+//        conectora.setPuerto(993);//993.5
+//        conectora.setUsuario("secm.prueba@gmail.com");
+//        conectora.setContrasena("AngelaJorgeElias");
+//        conectora.setUsarSSL(true);
+//        String[] res = DriverCorreo.getInstancia().verificarSiExisteCorreoPorAsunto(conectora, "ELIMINAR");
+//
+//        for (int i = 0; i < res.length; i++) {
+//            String string = res[i];
+//            System.out.println(string);
+//        }
     }
 }

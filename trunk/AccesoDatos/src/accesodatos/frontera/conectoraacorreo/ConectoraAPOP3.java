@@ -16,7 +16,7 @@ import javax.mail.Store;
  */
 public class ConectoraAPOP3 implements ConectoraACorreo{
 
-    private Properties props;
+    public Properties props;
     private Autenticadora auth;
 
     public ConectoraAPOP3(){
@@ -74,5 +74,18 @@ public class ConectoraAPOP3 implements ConectoraACorreo{
           }
       }
     }
+    public static void main(String[] args) throws MessagingException, InterruptedException {
 
+        for (int i = 0; i < 50; i++) {
+            ConectoraAPOP3 c = new ConectoraAPOP3();
+            c.setHost("pop.gmail.com");
+            c.setPuerto(995);
+            c.setUsarSSL(true);
+            c.setUsuario("secm3.prueba@gmail.com");
+            c.setContrasena("AngelaJorgeElias");
+            Store s = c.conectar();
+            System.out.println(s.isConnected());
+            Thread.sleep(30*1000);
+        }
+    }
 }

@@ -9,6 +9,7 @@ import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Properties;
+import java.util.regex.Matcher;
 
 /**
  *
@@ -93,7 +94,7 @@ public class OrigenDeDatos implements Serializable{
                     etiquetasList.add(etiqueta);
                     columnasDeOrigen.add( columnas.getProperty(etiqueta));
                 }else{
-                    where= columnas.getProperty(etiqueta);
+                    where= "WHERE "+columnas.getProperty(etiqueta);
                 }
             }
 
@@ -134,6 +135,7 @@ public class OrigenDeDatos implements Serializable{
                         }else if(etiqueta.equals("#destinatariosBCC#")){
                             correo.setDestinatariosBCC(columna.split(","));
                         }else{
+                            columna = Matcher.quoteReplacement(columna);
                             mensajeActual=mensajeActual.replaceAll(etiqueta, columna);
                         }
                         j++;
