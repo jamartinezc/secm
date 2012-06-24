@@ -77,10 +77,14 @@ public class ConsultoraDeBD implements ConsultoraDeOrigen , Serializable{
             tablas = DriverBD.consultarTablas(conexion);
 
             for (int i = 0; i < tablas.length; i++) {
-                columnas = DriverBD.consultarColumnas(conexion, tablas[i]);
-                for (int j = 0; j < columnas.length; j++) {
-                    String columna = tablas[i]+"."+columnas[j];
-                    tablasYcolumnas.add(columna);
+                try {
+                    columnas = DriverBD.consultarColumnas(conexion, tablas[i]);
+                    for (int j = 0; j < columnas.length; j++) {
+                        String columna = tablas[i]+"."+columnas[j];
+                        tablasYcolumnas.add(columna);
+                    }
+                } catch (SQLException ex) {
+                    //Ocurre cuando no se tienen permisos para acceder a la tabla seleccionada
                 }
             }
         } catch (SQLException ex) {
