@@ -68,7 +68,9 @@ public class DriverBD {
 
     public static void seleccionarBD(Connection con, String dataBaseName) throws SQLException{
 
-        con.setCatalog(dataBaseName);
+        if ( (dataBaseName != null && !dataBaseName.equals("") ) ) {
+            con.setCatalog(dataBaseName);
+        }
 
     }
 
